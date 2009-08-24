@@ -173,7 +173,7 @@ def page(_context, name, permission, for_=Interface,
 
 class pages(object):
 
-    def __init__(self, _context, for_, permission,
+    def __init__(self, _context, permission, for_=Interface,
                  layer=IDefaultBrowserLayer, class_=None,
                  allowed_interface=None, allowed_attributes=None,
                  ):
@@ -204,7 +204,7 @@ class view(object):
 
     default = None
 
-    def __init__(self, _context, for_, permission,
+    def __init__(self, _context, permission, for_=Interface,
                  name='', layer=IDefaultBrowserLayer, class_=None,
                  allowed_interface=None, allowed_attributes=None,
                  menu=None, title=None, provides=Interface,
