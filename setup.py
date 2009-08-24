@@ -31,8 +31,7 @@ setup(name='zope.browserpage',
                      'Topic :: Internet :: WWW/HTTP',
                      'Framework :: Zope3',
                      ],
-      description='Implementations and means for configuration of Zope 3-'
-                  'style views.',
+      description='ZCML directives for configuration browser views for Zope 3.',
       long_description=long_description,
 
       packages=find_packages('src'),
