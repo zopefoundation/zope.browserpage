@@ -1,0 +1,8 @@
+=======
+CHANGES
+=======
+
+3.9.0 (unreleased)
+==================
+
+Initial release. This package was splitted off from zope.app.publisher.
