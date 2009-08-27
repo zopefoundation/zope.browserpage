@@ -11,9 +11,9 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Browser configuration code
+"""Browser page ZCML configuration code
 
-$Id: viewmeta.py 103154 2009-08-24 14:45:16Z nadako $
+$Id$
 """
 import os
 
