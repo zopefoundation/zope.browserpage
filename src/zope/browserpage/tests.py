@@ -11,9 +11,9 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""'browser' namespace directive tests
+"""Tests for browser:page directive and friends
 
-$Id: test_directives.py 103154 2009-08-24 14:45:16Z nadako $
+$Id$
 """
 
 import sys

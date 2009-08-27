@@ -11,11 +11,9 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Browser configuration code
+"""ZCML directives for defining browser pages
 
-This module defines the schemas for browser directives.
-
-$Id: metadirectives.py 103154 2009-08-24 14:45:16Z nadako $
+$Id$
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, GlobalInterface
