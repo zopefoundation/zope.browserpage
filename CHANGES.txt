@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-3.10.1 (unreleased)
+3.10.1 (2009-12-22)
 ===================
 
 - We need to depend on the untrustedpython extra of zope.security, since we
