@@ -2,9 +2,10 @@
 CHANGES
 =======
 
-3.10.2 (unreleased)
+3.11.0 (unreleased)
 ===================
 
+- Also moved named template implementation from zope.app.pagetemplate here.
 
 3.10.1 (2009-12-22)
 ===================
