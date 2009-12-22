@@ -46,7 +46,7 @@ setup(name='zope.browserpage',
                         'zope.interface',
                         'zope.publisher>=3.8',
                         'zope.schema',
-                        'zope.security',
+                        'zope.security [untrustedpython]',
                         ],
       extras_require={
           'menu': ['zope.browsermenu'],
