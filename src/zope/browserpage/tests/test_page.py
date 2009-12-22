@@ -35,7 +35,7 @@ from zope.publisher.interfaces.browser import IBrowserSkinType, IDefaultSkin
 from zope.security.proxy import removeSecurityProxy, ProxyFactory
 from zope.security.permission import Permission
 from zope.security.interfaces import IPermission
-from zope.testing.doctestunit import DocTestSuite
+from zope.testing.doctest import DocTestSuite
 from zope.testing import cleanup
 from zope.traversing.adapters import DefaultTraversable
 from zope.traversing.interfaces import ITraversable
@@ -268,7 +268,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             <browser:page name="test"
                 class="zope.component.testfiles.views.VZMI"
                 layer="
-                  zope.browserpage.tests.ITestLayer"
+                  zope.browserpage.tests.test_page.ITestLayer"
                 for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 attribute="index"
@@ -311,7 +311,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         xmlconfig(StringIO(template %
             '''
             <browser:page name="test"
-                class="zope.browserpage.tests.V2"
+                class="zope.browserpage.tests.test_page.V2"
                 for="zope.component.testfiles.views.IC"
                 attribute="action"
                 permission="zope.Public"
@@ -330,7 +330,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         xmlconfig(StringIO(template %
             '''
             <browser:view name="test"
-                class="zope.browserpage.tests.V2"
+                class="zope.browserpage.tests.test_page.V2"
                 for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 allowed_attributes="action2"
@@ -389,7 +389,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             <browser:page
                 name="test"
                 class="
-             zope.browserpage.tests.C_w_implements"
+             zope.browserpage.tests.test_page.C_w_implements"
                 for="zope.component.testfiles.views.IC"
                 attribute="index"
                 permission="zope.Public"
@@ -454,7 +454,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
             <browser:view
                 name="test"
-                class="zope.browserpage.tests.V1"
+                class="zope.browserpage.tests.test_page.V1"
                 for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 >
@@ -487,7 +487,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
             <browser:view
                 name="test"
-                class="zope.browserpage.tests.CV"
+                class="zope.browserpage.tests.test_page.CV"
                 for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 />
@@ -507,7 +507,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
             <browser:view
                 name="test"
-                class="zope.browserpage.tests.NCV"
+                class="zope.browserpage.tests.test_page.NCV"
                 for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 />
@@ -606,7 +606,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
             <browser:page name="index.html"
                 for="zope.component.testfiles.views.IV"
-                class="zope.browserpage.tests.CV"
+                class="zope.browserpage.tests.test_page.CV"
                 permission="zope.Public" />
             '''
             ))
@@ -627,13 +627,13 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
             <browser:view
                 name="test"
-                class="zope.browserpage.tests.VT"
+                class="zope.browserpage.tests.test_page.VT"
                 for="zope.component.testfiles.views.IC"
                 permission="zope.Public" />
 
             <browser:page name="index.html"
                 for="zope.component.testfiles.views.IV"
-                class="zope.browserpage.tests.CV"
+                class="zope.browserpage.tests.test_page.CV"
                 permission="zope.Public" />
             '''
             ))
@@ -725,7 +725,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
                 for="*"
                 class="zope.component.testfiles.views.V1"
                 layer="
-                  zope.browserpage.tests.ITestLayer"
+                  zope.browserpage.tests.test_page.ITestLayer"
                 permission="zope.Public"
                 >
               <browser:page name="index.html" attribute="action" />
@@ -771,7 +771,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             <browser:menu
                 id="test_menu"
                 title="Test menu"
-                interface="zope.browserpage.tests.ITestMenu"/>
+                interface="zope.browserpage.tests.test_page.ITestMenu"/>
 
             <browser:page
                 name="index.html"
@@ -786,7 +786,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
                 for="zope.component.testfiles.views.IC"
                 menu="test_menu" title="Index"
                 template="%s"
-                layer="zope.browserpage.tests.ITestLayer"/>
+                layer="zope.browserpage.tests.test_page.ITestLayer"/>
             ''' % (path, path)
             ))
 
@@ -806,7 +806,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
                 name="index.html"
                 template="%s"
                 permission="zope.Public"
-          class="zope.browserpage.tests.templateclass"
+          class="zope.browserpage.tests.test_page.templateclass"
                 for="zope.component.testfiles.views.IC" />
             ''' % path
             ))

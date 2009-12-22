@@ -24,13 +24,17 @@ from zope.interface import implements, classImplements, Interface
 from zope.publisher.interfaces import NotFound
 from zope.security.checker import CheckerPublic, Checker, defineChecker
 from zope.configuration.exceptions import ConfigurationError
+from zope.pagetemplate.engine import Engine
+from zope.pagetemplate.engine import _Engine
+from zope.pagetemplate.engine import TrustedEngine
+from zope.pagetemplate.engine import _TrustedEngine
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.browser import BrowserView
 
-from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.simpleviewclass import SimpleViewClass
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 try:
     from zope.browsermenu.metaconfigure import menuItemDirective
@@ -429,3 +433,23 @@ def providesCallable(class_):
             if '__call__' in c.__dict__:
                 return True
     return False
+
+
+def registerType(name, handler):
+    Engine.registerType(name, handler)
+    TrustedEngine.registerType(name, handler)
+
+
+def clear():
+    Engine.__init__()
+    _Engine(Engine)
+    TrustedEngine.__init__()
+    _TrustedEngine(TrustedEngine)
+
+
+try:
+    from zope.testing.cleanup import addCleanUp
+except ImportError:
+    pass
+else:
+    addCleanUp(clear)

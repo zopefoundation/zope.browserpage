@@ -13,13 +13,13 @@
 ##############################################################################
 """zope.browserpage setup
 """
-from setuptools import setup, find_packages, Extension
+from setuptools import setup, find_packages
 
 long_description = (open('README.txt').read() + '\n\n' +
                     open('CHANGES.txt').read())
 
 setup(name='zope.browserpage',
-      version = '3.9.1dev',
+      version = '3.10.0dev',
       url='http://pypi.python.org/pypi/zope.browserpage/',
       author='Zope Corporation and Contributors',
       author_email='zope-dev@zope.org',
@@ -31,7 +31,7 @@ setup(name='zope.browserpage',
                      'Topic :: Internet :: WWW/HTTP',
                      'Framework :: Zope3',
                      ],
-      description='ZCML directives for configuration browser views for Zope 3.',
+      description='ZCML directives for configuring browser views for Zope.',
       long_description=long_description,
 
       packages=find_packages('src'),
@@ -40,7 +40,7 @@ setup(name='zope.browserpage',
       namespace_packages=['zope'],
       include_package_data=True,
       install_requires=['setuptools',
-                        'zope.app.pagetemplate',
+                        'zope.pagetemplate',
                         'zope.component>=3.7',
                         'zope.configuration',
                         'zope.interface',
