@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-3.10.0 (unreleased)
+3.10.0 (2009-12-22)
 ===================
 
 - Remove dependency on zope.app.pagetemplate by moving viewpagetemplatefile,
