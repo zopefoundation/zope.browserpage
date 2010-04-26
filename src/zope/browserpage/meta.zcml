@@ -41,4 +41,13 @@
 
   </meta:directives>
 
+  <meta:directives namespace="http://namespaces.zope.org/tales">
+
+    <meta:directive name="expressiontype"
+        schema=".metadirectives.IExpressionTypeDirective"
+        handler=".metaconfigure.expressiontype"
+        />
+
+  </meta:directives>
+
 </configure>

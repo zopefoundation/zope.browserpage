@@ -435,6 +435,13 @@ def providesCallable(class_):
     return False
 
 
+def expressiontype(_context, name, handler):
+    _context.action(
+        discriminator = ("tales:expressiontype", name),
+        callable = registerType,
+        args = (name, handler)
+        )
+
 def registerType(name, handler):
     Engine.registerType(name, handler)
     TrustedEngine.registerType(name, handler)

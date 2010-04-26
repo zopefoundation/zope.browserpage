@@ -187,3 +187,20 @@ class IPageDirective(IPagesDirective, IPagesPageSubdirective):
     The page directive creates a new view class from a given template
     and/or class and registers it.
     """
+
+class IExpressionTypeDirective(Interface):
+    """Register a new TALES expression type"""
+
+    name = TextLine(
+        title=u"Name",
+        description=u"""Name of the expression. This will also be used
+        as the prefix in actual TALES expressions.""",
+        required=True
+        )
+
+    handler = GlobalObject(
+        title=u"Handler",
+        description=u"""Handler is class that implements
+        zope.tales.interfaces.ITALESExpression.""",
+        required=True
+        )
