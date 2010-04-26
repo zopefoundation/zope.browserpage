@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-3.12.0 (unreleased)
+3.12.0 (2010-04-26)
 ===================
 
 - Moved tales:expressiontype implementation from zope.app.pagetemplate here.
