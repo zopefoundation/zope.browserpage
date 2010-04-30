@@ -19,6 +19,7 @@ $Id$
 import sys
 import os
 import unittest
+from doctest import DocTestSuite
 from cStringIO import StringIO
 
 from zope import component
@@ -35,7 +36,6 @@ from zope.publisher.interfaces.browser import IBrowserSkinType, IDefaultSkin
 from zope.security.proxy import removeSecurityProxy, ProxyFactory
 from zope.security.permission import Permission
 from zope.security.interfaces import IPermission
-from zope.testing.doctest import DocTestSuite
 from zope.testing import cleanup
 from zope.traversing.adapters import DefaultTraversable
 from zope.traversing.interfaces import ITraversable

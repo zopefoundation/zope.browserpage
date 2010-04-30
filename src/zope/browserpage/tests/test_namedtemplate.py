@@ -30,7 +30,7 @@ def pageSetUp(test):
 
 
 def test_suite():
-    from zope.testing import doctest
+    import doctest
     return doctest.DocFileSuite(
         os.path.join(os.pardir, 'namedtemplate.txt'),
         setUp=pageSetUp, tearDown=zope.component.testing.tearDown,
