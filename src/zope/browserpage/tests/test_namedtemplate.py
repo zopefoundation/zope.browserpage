@@ -31,7 +31,9 @@ def pageSetUp(test):
 
 def test_suite():
     import doctest
+    filename = os.path.join(os.pardir, 'namedtemplate.txt')
     return doctest.DocFileSuite(
-        os.path.join(os.pardir, 'namedtemplate.txt'),
+        filename,
         setUp=pageSetUp, tearDown=zope.component.testing.tearDown,
+        globs={'__file__':  os.path.abspath(os.path.join(os.path.dirname(__file__), filename))}
         )
