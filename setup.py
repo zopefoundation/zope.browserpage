@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2007 Zope Corporation and Contributors.
+# Copyright (c) 2007 Zope Foundation and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -21,7 +21,7 @@ long_description = (open('README.txt').read() + '\n\n' +
 setup(name='zope.browserpage',
       version = '3.12.2dev',
       url='http://pypi.python.org/pypi/zope.browserpage/',
-      author='Zope Corporation and Contributors',
+      author='Zope Foundation and Contributors',
       author_email='zope-dev@zope.org',
       classifiers = ['Environment :: Web Environment',
                      'Intended Audience :: Developers',
@@ -33,7 +33,7 @@ setup(name='zope.browserpage',
                      ],
       description='ZCML directives for configuring browser views for Zope.',
       long_description=long_description,
-
+      license='ZPL 2.1',
       packages=find_packages('src'),
       package_dir={'': 'src'},
 
