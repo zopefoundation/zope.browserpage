@@ -2,6 +2,12 @@
 CHANGES
 =======
 
+3.12.3 (unreleased)
+===================
+
+- TBD
+
+
 3.12.2 (2010-05-24)
 ===================
 
@@ -15,16 +21,19 @@ CHANGES
 - Prefer the standard library's ``doctest`` module to the one from
   ``zope.testing``.
 
+
 3.12.0 (2010-04-26)
 ===================
 
 - Move the implementation of ``tales:expressiontype`` here from
   ``zope.app.pagetemplate``.
 
+
 3.11.0 (2009-12-22)
 ===================
 
 - Move the named template implementation here from ``zope.app.pagetemplate``.
+
 
 3.10.1 (2009-12-22)
 ===================
@@ -32,12 +41,14 @@ CHANGES
 - Depend on the ``untrustedpython`` extra of ``zope.security``, since we
   import from ``zope.pagetemplate.engine``.
 
+
 3.10.0 (2009-12-22)
 ===================
 
 - Remove the dependency on ``zope.app.pagetemplate`` by moving
   ``viewpagetemplatefile``, ``simpleviewclass`` and
   ``metaconfigure.registerType`` into this package.
+
 
 3.9.0 (2009-08-27)
 ==================
