@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Sample Component
-
-$Id$
 """
 from zope.browserpage import ViewPageTemplateFile
 

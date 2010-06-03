@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Tests for browser:page directive and friends
-
-$Id$
 """
 
 import sys

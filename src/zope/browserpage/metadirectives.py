@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """ZCML directives for defining browser pages
-
-$Id$
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, GlobalInterface

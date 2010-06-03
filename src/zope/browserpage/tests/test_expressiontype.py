@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Tests to check talesapi zcml configuration
-
-$Id$
 """
 import unittest
 

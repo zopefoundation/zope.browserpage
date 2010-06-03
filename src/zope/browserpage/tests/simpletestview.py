@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Simple Test View
-
-$Id$
 """
 from zope.browserpage.simpleviewclass import SimpleViewClass
 
