@@ -15,8 +15,8 @@
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, GlobalInterface
-from zope.configuration.fields import Tokens, Path, PythonIdentifier, MessageID
-from zope.schema import TextLine, Id, Int, Bool
+from zope.configuration.fields import Path, PythonIdentifier, MessageID
+from zope.schema import TextLine
 from zope.security.zcml import Permission
 
 from zope.component.zcml import IBasicViewInformation
