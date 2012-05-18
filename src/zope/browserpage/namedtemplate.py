@@ -64,9 +64,8 @@ class NamedTemplate(object):
 
 
 # TODO need test
+@interface.implementer(zope.traversing.interfaces.IPathAdapter)
 class NamedTemplatePathAdapter(object):
-
-    interface.implements(zope.traversing.interfaces.IPathAdapter)
 
     def __init__(self, context):
         self.context = context

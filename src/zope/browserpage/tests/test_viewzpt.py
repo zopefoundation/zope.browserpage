@@ -17,7 +17,7 @@ import unittest
 
 from zope.component import getGlobalSiteManager
 from zope.component.testing import PlacelessSetup
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
@@ -25,8 +25,9 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 class I1(Interface):
     pass
 
+@implementer(I1)
 class C1(object):
-    implements(I1)
+    pass
 
 class InstanceWithContext(object):
     def __init__(self, context):
@@ -68,8 +69,9 @@ class TestViewZPT(PlacelessSetup, unittest.TestCase):
         gsm.registerAdapter(
             ViewMaker, (I1, IRequest), Interface, the_view_name, event=False)
 
+        @implementer(IRequest)
         class MyRequest(object):
-            implements(IRequest)
+            pass
 
         request = MyRequest()
 

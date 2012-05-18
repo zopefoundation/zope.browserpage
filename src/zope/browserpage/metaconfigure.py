@@ -18,7 +18,7 @@ import os
 from zope.component import queryMultiAdapter
 from zope.component.interface import provideInterface
 from zope.component.zcml import handler
-from zope.interface import implements, classImplements, Interface
+from zope.interface import implementer, classImplements, Interface
 from zope.publisher.interfaces import NotFound
 from zope.security.checker import CheckerPublic, Checker, defineChecker
 from zope.configuration.exceptions import ConfigurationError
@@ -408,8 +408,8 @@ def _handle_for(_context, for_):
             args = ('', for_)
             )
 
+@implementer(IBrowserPublisher)
 class simple(BrowserView):
-    implements(IBrowserPublisher)
 
     def publishTraverse(self, request, name):
         raise NotFound(self, name, request)

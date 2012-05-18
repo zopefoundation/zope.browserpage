@@ -21,7 +21,7 @@ from doctest import DocTestSuite
 from cStringIO import StringIO
 
 from zope import component
-from zope.interface import Interface, implements, directlyProvides, providedBy
+from zope.interface import Interface, implementer, directlyProvides, providedBy
 
 import zope.security.management
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
@@ -74,8 +74,9 @@ class VT(V1, object):
         except:
             return super(VT, self).publishTraverse(request, name)
 
+@implementer(IC)
 class Ob(object):
-    implements(IC)
+    pass
 
 ob = Ob()
 
@@ -91,8 +92,8 @@ class CV(NCV):
         pass
 
 
+@implementer(Interface)
 class C_w_implements(NCV):
-    implements(Interface)
 
     def index(self):
         return self

@@ -16,15 +16,14 @@
 __docformat__ = 'restructuredtext'
 
 import sys
-from zope.interface import implements
+from zope.interface import implementer
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
+@implementer(IBrowserPublisher)
 class simple(BrowserView):
-
-    implements(IBrowserPublisher)
 
     def browserDefault(self, request):
         return self, ()
