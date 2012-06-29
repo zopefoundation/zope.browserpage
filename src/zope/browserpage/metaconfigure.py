@@ -161,7 +161,7 @@ def page(_context, name, permission, for_=Interface,
     defineChecker(new_class, Checker(required))
 
     _context.action(
-        discriminator = ('view', for_, name, IBrowserRequest, layer),
+        discriminator = ('view', (for_, layer), name, IBrowserRequest),
         callable = handler,
         args = ('registerAdapter',
                 new_class, (for_, layer), Interface, name, _context.info),
@@ -216,7 +216,7 @@ class view(object):
 
         permission = _handle_permission(_context, permission)
 
-        self.args = (_context, name, for_, permission, layer, class_,
+        self.args = (_context, name, (for_, layer), permission, class_,
                      allowed_interface, allowed_attributes)
 
         self.pages = []
@@ -241,7 +241,7 @@ class view(object):
         return ()
 
     def __call__(self):
-        (_context, name, for_, permission, layer, class_,
+        (_context, name, (for_, layer), permission, class_,
          allowed_interface, allowed_attributes) = self.args
 
         required = {}

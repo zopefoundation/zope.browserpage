@@ -41,6 +41,13 @@ class IPagesDirective(IBasicViewInformation):
         required=False
         )
 
+    layer = GlobalObject(
+        title=u"The request interface or class this view is for.",
+        description=
+        u"Defaults to zope.publisher.interfaces.browser.IDefaultBrowserLayer.",
+        required=False
+        )
+
     permission = Permission(
         title=u"Permission",
         description=u"The permission needed to use the view.",

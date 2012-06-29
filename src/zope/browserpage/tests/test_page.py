@@ -266,9 +266,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
             <browser:page name="test"
                 class="zope.component.testfiles.views.VZMI"
-                layer="
-                  zope.browserpage.tests.test_page.ITestLayer"
                 for="zope.component.testfiles.views.IC"
+                layer="zope.browserpage.tests.test_page.ITestLayer"
                 permission="zope.Public"
                 attribute="index"
                 />
@@ -713,18 +712,17 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         xmlconfig(StringIO(template %
             '''
             <browser:pages
-                for="*"
                 class="zope.component.testfiles.views.V1"
+                for="*"
                 permission="zope.Public"
                 >
               <browser:page name="index.html" attribute="index" />
             </browser:pages>
 
             <browser:pages
-                for="*"
                 class="zope.component.testfiles.views.V1"
-                layer="
-                  zope.browserpage.tests.test_page.ITestLayer"
+                for="*"
+                layer="zope.browserpage.tests.test_page.ITestLayer"
                 permission="zope.Public"
                 >
               <browser:page name="index.html" attribute="action" />
