@@ -5,6 +5,10 @@ CHANGES
 4.0.0 (unreleased)
 ===================
 
+- When registering views, no longer pass the deprecated 'layer' agrument
+  to ``zope.component.registerAdapter``.  Instead, pass ``(for_, layer)``
+  as expected (forward-compatibility with ``zope.component`` 4.0.0).
+
 - Replaced deprecated ``zope.interface.implements`` usage with equivalent
   ``zope.interface.implementer`` decorator.
 
