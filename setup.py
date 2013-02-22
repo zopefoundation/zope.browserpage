@@ -35,7 +35,7 @@ def alltests():
 
 setup(
     name='zope.browserpage',
-    version = '4.1.0a1.dev',
+    version='4.1.0a1',
     url='http://pypi.python.org/pypi/zope.browserpage/',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
