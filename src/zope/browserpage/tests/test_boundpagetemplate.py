@@ -21,9 +21,9 @@ class Test(unittest.TestCase):
 
         from zope.browserpage.tests.sample import C
 
-        C.index.im_func.foo = 1
-        self.assertEqual(C.index.macros, C.index.im_func.macros)
-        self.assertEqual(C.index.filename, C.index.im_func.filename)
+        C.index.__func__.foo = 1
+        self.assertEqual(C.index.macros, C.index.__func__.macros)
+        self.assertEqual(C.index.filename, C.index.__func__.filename)
 
 
 

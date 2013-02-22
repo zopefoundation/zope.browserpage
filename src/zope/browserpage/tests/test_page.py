@@ -13,12 +13,10 @@
 ##############################################################################
 """Tests for browser:page directive and friends
 """
-
 import sys
 import os
 import unittest
 from doctest import DocTestSuite
-from cStringIO import StringIO
 
 from zope import component
 from zope.interface import Interface, implementer, directlyProvides, providedBy
@@ -44,6 +42,11 @@ import zope.browsermenu
 from zope.browsermenu.menu import getFirstMenuItem
 from zope.browsermenu.interfaces import IMenuItemType
 from zope.component.testfiles.views import IC, V1, VZMI, R1, IV
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 tests_path = os.path.dirname(__file__)
 

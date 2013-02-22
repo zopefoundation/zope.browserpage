@@ -15,14 +15,18 @@
 """
 import unittest
 
-from cStringIO import StringIO
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.pagetemplate.engine import Engine
 import zope.browserpage
-        
+
 from zope.component.testing import PlacelessSetup
 
-template = """<configure 
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
+
+template = """<configure
    xmlns='http://namespaces.zope.org/zope'
    xmlns:tales='http://namespaces.zope.org/tales'>
    %s
