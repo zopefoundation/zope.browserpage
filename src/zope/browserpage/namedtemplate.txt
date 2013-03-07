@@ -41,7 +41,8 @@ Now, with this in place, we should be able to use our view:
     ...         self.name = name
 
     >>> from zope.publisher.browser import TestRequest
-    >>> print(MyView(MyContent('bob'), TestRequest())(x=42))
+    >>> view = MyView(MyContent('bob'), TestRequest())
+    >>> print(view(x=42).replace('\r\n', '\n'))
     <html><body>
     Hello bob
     The URL is http://127.0.0.1
@@ -63,7 +64,8 @@ when the named template is created:
     >>> sample = ViewPageTemplateFile('tests/namedtemplate.pt')
     >>> sample = NamedTemplateImplementation(sample, MyView)
     >>> component.provideAdapter(sample, name='sample2')
-    >>> print(MyView(MyContent('bob'), TestRequest())(x=42))
+    >>> view = MyView(MyContent('bob'), TestRequest())
+    >>> print(view(x=42).replace('\r\n', '\n'))
     <html><body>
     Hello bob
     The URL is http://127.0.0.1

@@ -31,7 +31,7 @@ class Test_SimpleTestView(unittest.TestCase):
         view = self._makeOne(context, request)
         macro = view['test']
         out = view()
-        self.assertEqual(out,
+        self.assertEqual(out.replace('\r\n', '\n'),
                          '<html>\n'
                          '  <body>\n'
                          '    <p>hello world</p>\n'
@@ -71,7 +71,7 @@ class Test_SimpleViewClass(unittest.TestCase):
         view = klass(ob, request)
         macro = view['test']
         out = view()
-        self.assertEqual(out,
+        self.assertEqual(out.replace('\r\n', '\n'),
                          '<html>\n'
                          '  <body>\n'
                          '    <p>hello world</p>\n'

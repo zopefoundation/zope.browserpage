@@ -169,7 +169,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = component.queryMultiAdapter((ob, request), name='test')
-        self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
+        self.assertEqual(v().replace('\r\n', '\n'),
+                         "<html><body><p>test</p></body></html>\n")
 
 
     def testPageWithTemplateWithMenu(self):
@@ -197,7 +198,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = component.queryMultiAdapter((ob, request), name='test')
-        self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
+        self.assertEqual(v().replace('\r\n', '\n'),
+                         "<html><body><p>test</p></body></html>\n")
 
 
     def testPageInPagesWithTemplateWithMenu(self):
@@ -227,7 +229,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = component.queryMultiAdapter((ob, request), name='test')
-        self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
+        self.assertEqual(v().replace('\r\n', '\n'),
+                         "<html><body><p>test</p></body></html>\n")
 
 
     def testPageInPagesWithClassWithMenu(self):
@@ -258,7 +261,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = component.queryMultiAdapter((ob, request), name='test')
-        self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
+        self.assertEqual(v().replace('\r\n', '\n'),
+                         "<html><body><p>test</p></body></html>\n")
 
     def testSkinPage(self):
         self.assertEqual(
@@ -444,7 +448,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         v = component.getMultiAdapter((ob, request), name='action.html')
         self.assertEqual(v(), 'done')
         v = component.getMultiAdapter((ob, request), name='test.html')
-        self.assertEqual(str(v()), '<html><body><p>done</p></body></html>\n')
+        self.assertEqual(str(v()).replace('\r\n', '\n'),
+                         "<html><body><p>done</p></body></html>\n")
 
     def testNamedViewPageViewsCustomTraversr(self):
         self.assertEqual(
@@ -554,7 +559,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         self.assertEqual(v(), 'done')
         v = view.publishTraverse(request, 'test.html')
         v = removeSecurityProxy(v)
-        self.assertEqual(str(v()), '<html><body><p>done</p></body></html>\n')
+        self.assertEqual(str(v()).replace('\r\n', '\n'),
+                         "<html><body><p>done</p></body></html>\n")
 
     def testNamedViewPageViewsWithDefault(self):
         self.assertEqual(
@@ -592,7 +598,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         self.assertEqual(v(), 'done')
         v = view.publishTraverse(request, 'test.html')
         v = removeSecurityProxy(v)
-        self.assertEqual(str(v()), '<html><body><p>done</p></body></html>\n')
+        self.assertEqual(str(v()).replace('\r\n', '\n'),
+                         "<html><body><p>done</p></body></html>\n")
 
     def testTraversalOfPageForView(self):
         """Tests proper traversal of a page defined for a view."""
