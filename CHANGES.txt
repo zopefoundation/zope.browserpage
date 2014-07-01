@@ -7,6 +7,10 @@ CHANGES
 
 - Fix deprecated unittest methods.
 
+- Added explicit support for Python 3.4.
+
+- Added explicit support for PyPy.
+
 
 4.1.0a1 (2013-02-22)
 ====================
