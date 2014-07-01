@@ -140,7 +140,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             )))
 
         v = component.queryMultiAdapter((ob, request), name='test')
-        self.assert_(issubclass(v.__class__, V1))
+        self.assertTrue(issubclass(v.__class__, V1))
 
 
     def testPageWithClassWithMenu(self):
@@ -288,10 +288,10 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             )))
 
         v = component.queryMultiAdapter((ob, request), name='test')
-        self.assert_(issubclass(v.__class__, V1))
+        self.assertTrue(issubclass(v.__class__, V1))
         v = component.queryMultiAdapter(
             (ob, TestRequest(skin=ITestSkin)), name='test')
-        self.assert_(issubclass(v.__class__, VZMI))
+        self.assertTrue(issubclass(v.__class__, VZMI))
 
 
     def testInterfaceProtectedPage(self):
@@ -404,7 +404,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         v = component.getMultiAdapter((ob, request), name='test')
         self.assertEqual(v.index(), v)
-        self.assert_(IBrowserPublisher.providedBy(v))
+        self.assertTrue(IBrowserPublisher.providedBy(v))
 
     def testIncompleteProtectedPageNoPermission(self):
         self.assertRaises(
@@ -928,7 +928,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             ))
 
         v = component.queryMultiAdapter((ob, request), IV, name='test')
-        self.assert_(isinstance(v, V1))
+        self.assertTrue(isinstance(v, V1))
 
     def testUnnamedViewThatProvidesAnInterface(self):
         request = TestRequest()
@@ -961,7 +961,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         v = component.queryMultiAdapter((ob, request), IV)
 
-        self.assert_(isinstance(v, V1))
+        self.assertTrue(isinstance(v, V1))
 
 
 def test_suite():

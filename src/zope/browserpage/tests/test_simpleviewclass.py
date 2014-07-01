@@ -54,7 +54,7 @@ class Test_SimpleViewClass(unittest.TestCase):
     def test___getitem___(self):
         klass = self._makeKlass('testsimpleviewclass.pt', name='test.html')
         view = klass(None, None)
-        self.assert_(view['test'] is not None)
+        self.assertTrue(view['test'] is not None)
         self.assertRaises(KeyError, view.__getitem__, 'foo')
 
     def test_w_base_classes(self):
@@ -64,7 +64,7 @@ class Test_SimpleViewClass(unittest.TestCase):
 
         klass = self._makeKlass('testsimpleviewclass.pt', bases=(BaseClass, ))
 
-        self.failUnless(issubclass(klass, BaseClass))
+        self.assertTrue(issubclass(klass, BaseClass))
 
         ob = DummyContext()
         request = TestRequest()
@@ -110,41 +110,41 @@ class Test_simple(unittest.TestCase):
         request = DummyRequest()
         view = self._makeOne(request=request)
         index = view.index = DummyTemplate()
-        self.failUnless(view.publishTraverse(request, 'index.html') is index)
+        self.assertTrue(view.publishTraverse(request, 'index.html') is index)
 
     def test___getitem___uses_index_macros(self):
         view = self._makeOne()
         view.index = index = DummyTemplate()
         index.macros = {}
         index.macros['aaa'] = aaa = object()
-        self.failUnless(view['aaa'] is aaa)
+        self.assertTrue(view['aaa'] is aaa)
 
     def test___call___no_args_no_kw(self):
         view = self._makeOne()
         view.index = index = DummyTemplate()
         result = view()
-        self.failUnless(result is index)
+        self.assertTrue(result is index)
         self.assertEqual(index._called_with, ((), {}))
 
     def test___call___w_args_no_kw(self):
         view = self._makeOne()
         view.index = index = DummyTemplate()
         result = view('abc')
-        self.failUnless(result is index)
+        self.assertTrue(result is index)
         self.assertEqual(index._called_with, (('abc',), {}))
 
     def test___call___no_args_w_kw(self):
         view = self._makeOne()
         view.index = index = DummyTemplate()
         result = view(foo='bar')
-        self.failUnless(result is index)
+        self.assertTrue(result is index)
         self.assertEqual(index._called_with, ((), {'foo': 'bar'}))
 
     def test___call___no_args_no_kw(self):
         view = self._makeOne()
         view.index = index = DummyTemplate()
         result = view('abc', foo='bar')
-        self.failUnless(result is index)
+        self.assertTrue(result is index)
         self.assertEqual(index._called_with, (('abc',), {'foo': 'bar'}))
 
 

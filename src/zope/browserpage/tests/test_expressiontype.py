@@ -51,8 +51,8 @@ class Test(PlacelessSetup, unittest.TestCase):
               />
             """
             )))
-        self.assert_("test" in Engine.getTypes())
-        self.assert_(Handler is Engine.getTypes()['test'])
+        self.assertTrue("test" in Engine.getTypes())
+        self.assertTrue(Handler is Engine.getTypes()['test'])
 
 def test_suite():
     loader=unittest.TestLoader()

@@ -49,8 +49,8 @@ class TestViewZPT(PlacelessSetup, unittest.TestCase):
         request = None
 
         namespace = self.t.pt_getContext(InstanceWithContext(context), request)
-        self.failUnless(namespace['context'] is context)
-        self.failUnless('views' in namespace)
+        self.assertTrue(namespace['context'] is context)
+        self.assertTrue('views' in namespace)
 
     def testNamespaceHereNotAvailable(self):
         request = None
@@ -78,21 +78,21 @@ class TestViewZPT(PlacelessSetup, unittest.TestCase):
         namespace = self.t.pt_getContext(InstanceWithContext(self.context),
                                          request)
         views = namespace['views']
-        self.failUnless(the_view is views[the_view_name])
+        self.assertTrue(the_view is views[the_view_name])
 
     def test_debug_flags(self):
         from zope.publisher.browser import TestRequest
         self.request = TestRequest()
         self.request.debug.sourceAnnotations = False
-        self.assert_('test.pt' not in self.t(self))
+        self.assertFalse('test.pt' in self.t(self))
         self.request.debug.sourceAnnotations = True
-        self.assert_('test.pt' in self.t(self))
+        self.assertTrue('test.pt' in self.t(self))
 
         t = ViewPageTemplateFile('testsimpleviewclass.pt')
         self.request.debug.showTAL = False
-        self.assert_('metal:' not in t(self))
+        self.assertFalse('metal:' in t(self))
         self.request.debug.showTAL = True
-        self.assert_('metal:' in t(self))
+        self.assertTrue('metal:' in t(self))
 
     def test_render_sets_content_type_unless_set(self):
         from zope.publisher.browser import TestRequest
@@ -100,15 +100,15 @@ class TestViewZPT(PlacelessSetup, unittest.TestCase):
 
         self.request = TestRequest()
         response = self.request.response
-        self.assert_(not response.getHeader('Content-Type'))
+        self.assertFalse(response.getHeader('Content-Type'))
         t(self)
-        self.assertEquals(response.getHeader('Content-Type'), 'text/html')
+        self.assertEqual(response.getHeader('Content-Type'), 'text/html')
 
         self.request = TestRequest()
         response = self.request.response
         response.setHeader('Content-Type', 'application/x-test-junk')
         t(self)
-        self.assertEquals(response.getHeader('Content-Type'),
+        self.assertEqual(response.getHeader('Content-Type'),
                           'application/x-test-junk')
         
 
@@ -117,20 +117,20 @@ class TestViewZPTContentType(unittest.TestCase):
     def testInitWithoutType(self):
         t = ViewPageTemplateFile('test.pt')
         t._cook_check()
-        self.assertEquals(t.content_type, "text/html")
+        self.assertEqual(t.content_type, "text/html")
 
         t = ViewPageTemplateFile('testxml.pt')
         t._cook_check()
-        self.assertEquals(t.content_type, "text/xml")
+        self.assertEqual(t.content_type, "text/xml")
 
     def testInitWithType(self):
         t = ViewPageTemplateFile('test.pt', content_type="text/plain")
         t._cook_check()
-        self.assertEquals(t.content_type, "text/plain")
+        self.assertEqual(t.content_type, "text/plain")
 
         t = ViewPageTemplateFile('testxml.pt', content_type="text/plain")
         t._cook_check()
-        self.assertEquals(t.content_type, "text/xml")
+        self.assertEqual(t.content_type, "text/xml")
 
 
 def test_suite():
