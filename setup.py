@@ -75,7 +75,11 @@ setup(
         ],
     extras_require={
         'menu': ['zope.browsermenu'],
-        'test': ['zope.testing', 'zope.browsermenu'],
+        'test': [
+          'zope.browsermenu',
+          'zope.testing',
+          'zope.testrunner',
+          ],
         },
       tests_require = [
           'zope.browsermenu',
