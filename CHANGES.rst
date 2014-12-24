@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-4.1.0 (unreleased)
+4.1.1 (2014-12-24)
 ==================
 
 - Fix deprecated unittest methods.
