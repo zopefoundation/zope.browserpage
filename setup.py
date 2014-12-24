@@ -13,10 +13,14 @@
 ##############################################################################
 """zope.browserpage setup
 """
+import os
 from setuptools import setup, find_packages
 
-long_description = (open('README.txt').read() + '\n\n' +
-                    open('CHANGES.txt').read())
+def read(*rnames):
+    with open(os.path.join(os.path.dirname(__file__), *rnames)) as f:
+        return f.read()
+
+long_description = (read('README.rst') + '\n\n' + read('CHANGES.rst'))
 
 def alltests():
     import os
