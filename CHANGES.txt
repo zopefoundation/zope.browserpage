@@ -2,20 +2,20 @@
 CHANGES
 =======
 
-4.1.0a2 (unreleased)
-====================
+4.1.0 (unreleased)
+==================
 
 - Fix deprecated unittest methods.
 
-- Added explicit support for Python 3.4.
+- Add explicit support for Python 3.4.
 
-- Added explicit support for PyPy.
+- Add explicit support for PyPy.
 
 
 4.1.0a1 (2013-02-22)
 ====================
 
-- Added support for Python 3.3.
+- Add support for Python 3.3.
 
 
 4.0.0 (2012-07-04)
@@ -25,16 +25,16 @@ CHANGES
   to ``zope.component.registerAdapter``.  Instead, pass ``(for_, layer)``
   as expected (forward-compatibility with ``zope.component`` 4.0.0).
 
-- Replaced deprecated ``zope.interface.implements`` usage with equivalent
+- Replace deprecated ``zope.interface.implements`` usage with equivalent
   ``zope.interface.implementer`` decorator.
 
-- Dropped support for Python 2.4 and 2.5.
+- Drop support for Python 2.4 and 2.5.
 
 
 3.12.2 (2010-05-24)
 ===================
 
-- Fixed unit tests broken under Python 2.4 by the switch to the standard
+- Fix unit tests broken under Python 2.4 by the switch to the standard
   library ``doctest`` module.
 
 
