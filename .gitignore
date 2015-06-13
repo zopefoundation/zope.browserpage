@@ -1,9 +1,9 @@
 *.pyc
-__pycache__
+__pycache__/
 src/*.egg-info
-
 .installed.cfg
 .tox
-bin
-develop-eggs
-parts
+bin/
+develop-eggs/
+parts/
+eggs/
