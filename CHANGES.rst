@@ -1,12 +1,13 @@
-Changes
-=======
+=========
+ Changes
+=========
 
 4.2.0 (unreleased)
 ==================
 
-- Add support for Python 3.5.
+- Add support for Python 3.5 and 3.6.
 
-- Drop support for Python 2.6.
+- Drop support for Python 2.6 and 3.3.
 
 
 4.1.0 (2014-12-24)
@@ -26,7 +27,7 @@ Changes
 
 
 4.0.0 (2012-07-04)
-===================
+==================
 
 - When registering views, no longer pass the deprecated 'layer' agrument
   to ``zope.component.registerAdapter``.  Instead, pass ``(for_, layer)``
