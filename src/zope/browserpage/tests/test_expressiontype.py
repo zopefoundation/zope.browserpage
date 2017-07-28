@@ -14,6 +14,7 @@
 """Tests to check talesapi zcml configuration
 """
 import unittest
+from io import StringIO
 
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.pagetemplate.engine import Engine
@@ -21,12 +22,7 @@ import zope.browserpage
 
 from zope.component.testing import PlacelessSetup
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
-
-template = """<configure
+template = u"""<configure
    xmlns='http://namespaces.zope.org/zope'
    xmlns:tales='http://namespaces.zope.org/tales'>
    %s
@@ -43,20 +39,17 @@ class Test(PlacelessSetup, unittest.TestCase):
         XMLConfig('meta.zcml', zope.browserpage)()
 
     def testExpressionType(self):
-        xmlconfig(StringIO(template % (
-            """
+        xmlconfig(StringIO(
+            template %
+            u"""
             <tales:expressiontype
               name="test"
               handler="zope.browserpage.tests.test_expressiontype.Handler"
               />
             """
-            )))
-        self.assertTrue("test" in Engine.getTypes())
-        self.assertTrue(Handler is Engine.getTypes()['test'])
+        ))
+        self.assertIn("test", Engine.getTypes())
+        self.assertIs(Handler, Engine.getTypes()['test'])
 
 def test_suite():
-    loader=unittest.TestLoader()
-    return loader.loadTestsFromTestCase(Test)
-
-if __name__=='__main__':
-    unittest.TextTestRunner().run(test_suite())
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)

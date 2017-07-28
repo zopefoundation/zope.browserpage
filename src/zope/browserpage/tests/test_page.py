@@ -56,19 +56,12 @@ class templateclass(object):
     def data(self):
         return 42
 
-request = TestRequest()
-
-class Request(object):
-
-    def __init__(self, type):
-        directlyProvides(self, type)
-
 class IR(Interface):
     pass
 
 class IV(Interface):
     def index():
-        pass
+        "A method"
 
 class IC(Interface):
     pass
@@ -88,20 +81,11 @@ class V1(object):
 
 class VZMI(V1):
     def index(self):
-        return 'ZMI here'
+        raise AssertionError("Not called")
 
 @implementer(IV)
 class R1(object):
-
-    def index(self):
-        return 'R1 here'
-
-    def action(self):
-        return 'R done'
-
-    def __init__(self, request):
-        pass
-
+    pass
 
 class RZMI(R1):
     pass
@@ -116,10 +100,7 @@ class V2(V1, object):
 
 class VT(V1, object):
     def publishTraverse(self, request, name):
-        try:
-            return int(name)
-        except:
-            return super(VT, self).publishTraverse(request, name)
+        raise AssertionError("Not called")
 
 @implementer(IC)
 class Ob(object):
@@ -136,7 +117,7 @@ class NCV(object):
 class CV(NCV):
     "callable view"
     def __call__(self):
-        pass
+        raise AssertionError("Not called")
 
 
 @implementer(Interface)
@@ -165,10 +146,11 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         XMLConfig('meta.zcml', zope.browsermenu)()
         component.provideAdapter(DefaultTraversable, (None,), ITraversable, )
         zope.security.management.newInteraction()
+        self.request = TestRequest()
 
     def testPage(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
 
         xmlconfig(StringIO(template % (
@@ -183,13 +165,13 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
             )))
 
-        v = component.queryMultiAdapter((ob, request), name='test')
+        v = component.queryMultiAdapter((ob, self.request), name='test')
         self.assertTrue(issubclass(v.__class__, V1))
 
 
     def testPageWithClassWithMenu(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
 
@@ -212,14 +194,14 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         menuItem = getFirstMenuItem('test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
-        v = component.queryMultiAdapter((ob, request), name='test')
+        v = component.queryMultiAdapter((ob, self.request), name='test')
         self.assertEqual(v().replace('\r\n', '\n'),
                          "<html><body><p>test</p></body></html>\n")
 
 
     def testPageWithTemplateWithMenu(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
 
@@ -241,14 +223,14 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         menuItem = getFirstMenuItem('test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
-        v = component.queryMultiAdapter((ob, request), name='test')
+        v = component.queryMultiAdapter((ob, self.request), name='test')
         self.assertEqual(v().replace('\r\n', '\n'),
                          "<html><body><p>test</p></body></html>\n")
 
 
     def testPageInPagesWithTemplateWithMenu(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
 
@@ -272,14 +254,14 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         menuItem = getFirstMenuItem('test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
-        v = component.queryMultiAdapter((ob, request), name='test')
+        v = component.queryMultiAdapter((ob, self.request), name='test')
         self.assertEqual(v().replace('\r\n', '\n'),
                          "<html><body><p>test</p></body></html>\n")
 
 
     def testPageInPagesWithClassWithMenu(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
 
@@ -304,13 +286,13 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         menuItem = getFirstMenuItem('test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
-        v = component.queryMultiAdapter((ob, request), name='test')
+        v = component.queryMultiAdapter((ob, self.request), name='test')
         self.assertEqual(v().replace('\r\n', '\n'),
                          "<html><body><p>test</p></body></html>\n")
 
     def testSkinPage(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
 
         xmlconfig(StringIO(
@@ -332,7 +314,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        v = component.queryMultiAdapter((ob, request), name='test')
+        v = component.queryMultiAdapter((ob, self.request), name='test')
         self.assertTrue(issubclass(v.__class__, V1))
         v = component.queryMultiAdapter(
             (ob, TestRequest(skin=ITestSkin)), name='test')
@@ -353,7 +335,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        v = component.getMultiAdapter((ob, request), name='test')
+        v = component.getMultiAdapter((ob, self.request), name='test')
         v = ProxyFactory(v)
         self.assertEqual(v.index(), 'V1 here')
         self.assertRaises(Exception, getattr, v, 'action')
@@ -372,7 +354,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        v = component.getMultiAdapter((ob, request), name='test')
+        v = component.getMultiAdapter((ob, self.request), name='test')
         v = ProxyFactory(v)
         self.assertEqual(v.action(), 'done')
         self.assertEqual(v.action2(), 'done')
@@ -393,9 +375,9 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        v = component.getMultiAdapter((ob, request), name='test')
+        v = component.getMultiAdapter((ob, self.request), name='test')
         v = ProxyFactory(v)
-        page = v.publishTraverse(request, 'index.html')
+        page = v.publishTraverse(self.request, 'index.html')
         self.assertEqual(page(), 'done')
         self.assertEqual(v.action2(), 'done')
         self.assertRaises(Exception, getattr, page, 'index')
@@ -415,7 +397,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        v = component.getMultiAdapter((ob, request), name='test')
+        v = component.getMultiAdapter((ob, self.request), name='test')
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
@@ -434,7 +416,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        v = component.getMultiAdapter((ob, request), name='test')
+        v = component.getMultiAdapter((ob, self.request), name='test')
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
@@ -453,7 +435,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        v = component.getMultiAdapter((ob, request), name='test')
+        v = component.getMultiAdapter((ob, self.request), name='test')
         self.assertEqual(v.index(), v)
         self.assertTrue(IBrowserPublisher.providedBy(v))
 
@@ -476,7 +458,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
     def testPageViews(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
         test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
@@ -496,17 +478,17 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             ''' % test3
         ))
 
-        v = component.getMultiAdapter((ob, request), name='index.html')
+        v = component.getMultiAdapter((ob, self.request), name='index.html')
         self.assertEqual(v(), 'V1 here')
-        v = component.getMultiAdapter((ob, request), name='action.html')
+        v = component.getMultiAdapter((ob, self.request), name='action.html')
         self.assertEqual(v(), 'done')
-        v = component.getMultiAdapter((ob, request), name='test.html')
+        v = component.getMultiAdapter((ob, self.request), name='test.html')
         self.assertEqual(str(v()).replace('\r\n', '\n'),
                          "<html><body><p>done</p></body></html>\n")
 
     def testNamedViewPageViewsCustomTraversr(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
 
         xmlconfig(StringIO(
@@ -525,22 +507,22 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        view = component.getMultiAdapter((ob, request), name='test')
+        view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
-        self.assertEqual(view.browserDefault(request)[1], (u'index.html', ))
+        self.assertEqual(view.browserDefault(self.request)[1], (u'index.html', ))
 
 
-        v = view.publishTraverse(request, 'index.html')
+        v = view.publishTraverse(self.request, 'index.html')
         v = removeSecurityProxy(v)
         self.assertEqual(v(), 'V1 here')
-        v = view.publishTraverse(request, 'action.html')
+        v = view.publishTraverse(self.request, 'action.html')
         v = removeSecurityProxy(v)
         self.assertEqual(v(), 'done')
 
 
     def testNamedViewNoPagesForCallable(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
 
         xmlconfig(StringIO(
@@ -555,13 +537,13 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        view = component.getMultiAdapter((ob, request), name='test')
+        view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
-        self.assertEqual(view.browserDefault(request), (view, ()))
+        self.assertEqual(view.browserDefault(self.request), (view, ()))
 
     def testNamedViewNoPagesForNonCallable(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
 
         xmlconfig(StringIO(
@@ -576,13 +558,13 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        view = component.getMultiAdapter((ob, request), name='test')
+        view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
         self.assertEqual(getattr(view, 'browserDefault', None), None)
 
     def testNamedViewPageViewsNoDefault(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
         test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
@@ -603,25 +585,25 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             ''' % test3
         ))
 
-        view = component.getMultiAdapter((ob, request), name='test')
+        view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
-        self.assertEqual(view.browserDefault(request)[1], (u'index.html', ))
+        self.assertEqual(view.browserDefault(self.request)[1], (u'index.html', ))
 
 
-        v = view.publishTraverse(request, 'index.html')
+        v = view.publishTraverse(self.request, 'index.html')
         v = removeSecurityProxy(v)
         self.assertEqual(v(), 'V1 here')
-        v = view.publishTraverse(request, 'action.html')
+        v = view.publishTraverse(self.request, 'action.html')
         v = removeSecurityProxy(v)
         self.assertEqual(v(), 'done')
-        v = view.publishTraverse(request, 'test.html')
+        v = view.publishTraverse(self.request, 'test.html')
         v = removeSecurityProxy(v)
         self.assertEqual(str(v()).replace('\r\n', '\n'),
                          "<html><body><p>done</p></body></html>\n")
 
     def testNamedViewPageViewsWithDefault(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
         test3 = os.path.join(tests_path, u'testfiles', u'test3.pt')
 
@@ -643,18 +625,18 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             ''' % test3
         ))
 
-        view = component.getMultiAdapter((ob, request), name='test')
+        view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
-        self.assertEqual(view.browserDefault(request)[1], (u'test.html', ))
+        self.assertEqual(view.browserDefault(self.request)[1], (u'test.html', ))
 
 
-        v = view.publishTraverse(request, 'index.html')
+        v = view.publishTraverse(self.request, 'index.html')
         v = removeSecurityProxy(v)
         self.assertEqual(v(), 'V1 here')
-        v = view.publishTraverse(request, 'action.html')
+        v = view.publishTraverse(self.request, 'action.html')
         v = removeSecurityProxy(v)
         self.assertEqual(v(), 'done')
-        v = view.publishTraverse(request, 'test.html')
+        v = view.publishTraverse(self.request, 'test.html')
         v = removeSecurityProxy(v)
         self.assertEqual(str(v()).replace('\r\n', '\n'),
                          "<html><body><p>done</p></body></html>\n")
@@ -678,9 +660,9 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        view = component.getMultiAdapter((ob, request), name='test')
+        view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
-        view.publishTraverse(request, 'index.html')
+        view.publishTraverse(self.request, 'index.html')
 
     def testTraversalOfPageForViewWithPublishTraverse(self):
         """Tests proper traversal of a page defined for a view.
@@ -706,9 +688,9 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        view = component.getMultiAdapter((ob, request), name='test')
+        view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
-        view.publishTraverse(request, 'index.html')
+        view.publishTraverse(self.request, 'index.html')
 
     def testProtectedPageViews(self):
         component.provideUtility(Permission('p', 'P'), IPermission, 'p')
@@ -747,7 +729,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
     def testProtectedNamedViewPageViews(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
 
         xmlconfig(StringIO(
@@ -770,15 +752,15 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        view = component.getMultiAdapter((ob, request), name='test')
-        self.assertEqual(view.browserDefault(request)[1], (u'index.html', ))
+        view = component.getMultiAdapter((ob, self.request), name='test')
+        self.assertEqual(view.browserDefault(self.request)[1], (u'index.html', ))
 
-        v = view.publishTraverse(request, 'index.html')
+        v = view.publishTraverse(self.request, 'index.html')
         self.assertEqual(v(), 'V1 here')
 
     def testSkinnedPageView(self):
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='test'),
+            component.queryMultiAdapter((ob, self.request), name='test'),
             None)
 
         xmlconfig(StringIO(
@@ -803,7 +785,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
         ))
 
-        v = component.getMultiAdapter((ob, request), name='index.html')
+        v = component.getMultiAdapter((ob, self.request), name='index.html')
         self.assertEqual(v(), 'V1 here')
         v = component.getMultiAdapter((ob, TestRequest(skin=ITestSkin)),
                                       name='index.html')
@@ -814,7 +796,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='index.html'),
+            component.queryMultiAdapter((ob, self.request), name='index.html'),
             None)
 
         xmlconfig(StringIO(
@@ -828,13 +810,13 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             ''' % path
         ))
 
-        v = component.getMultiAdapter((ob, request), name='index.html')
+        v = component.getMultiAdapter((ob, self.request), name='index.html')
         self.assertEqual(v().strip(), '<html><body><p>test</p></body></html>')
 
     def test_page_menu_within_different_layers(self):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='index.html'),
+            component.queryMultiAdapter((ob, self.request), name='index.html'),
             None)
 
         xmlconfig(StringIO(
@@ -862,14 +844,14 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             ''' % (path, path)
             ))
 
-        v = component.getMultiAdapter((ob, request), name='index.html')
+        v = component.getMultiAdapter((ob, self.request), name='index.html')
         self.assertEqual(v().strip(), '<html><body><p>test</p></body></html>')
 
     def testtemplateWClass(self):
         path = os.path.join(tests_path, 'testfiles', 'test2.pt')
 
         self.assertEqual(
-            component.queryMultiAdapter((ob, request), name='index.html'),
+            component.queryMultiAdapter((ob, self.request), name='index.html'),
             None)
 
         xmlconfig(StringIO(
@@ -884,7 +866,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             ''' % path
         ))
 
-        v = component.getMultiAdapter((ob, request), name='index.html')
+        v = component.getMultiAdapter((ob, self.request), name='index.html')
         self.assertEqual(v().strip(), '<html><body><p>42</p></body></html>')
 
     def testProtectedtemplate(self):

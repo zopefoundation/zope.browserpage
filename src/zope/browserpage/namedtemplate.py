@@ -21,7 +21,7 @@ class INamedTemplate(interface.Interface):
     """A template that is looked up by name
     """
 
-class NamedTemplateImplementation:
+class NamedTemplateImplementation(object):
 
     def __init__(self, descriptor, view_type=None):
         try:
@@ -40,7 +40,7 @@ class NamedTemplateImplementation:
         return self.descriptor.__get__(instance, instance.__class__)
 
 
-class implementation:
+class implementation(object):
 
     def __init__(self, view_type=None):
         self.view_type = view_type
@@ -63,7 +63,6 @@ class NamedTemplate(object):
         self.__get__(instance)(*args, **kw)
 
 
-# TODO need test
 @interface.implementer(zope.traversing.interfaces.IPathAdapter)
 class NamedTemplatePathAdapter(object):
 

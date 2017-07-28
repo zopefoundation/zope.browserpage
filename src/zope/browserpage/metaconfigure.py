@@ -34,10 +34,19 @@ from zope.publisher.browser import BrowserView
 from zope.browserpage.simpleviewclass import SimpleViewClass
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
+def _fallbackMenuItemDirective(_context, *args, **kwargs):
+    import warnings
+    warnings.warn_explicit(
+        'Page directive used with "menu" argument, while "zope.browsermenu" '
+        'package is not installed. Doing nothing.',
+        UserWarning,
+        _context.info.file, _context.info.line)
+    return []
+
 try:
     from zope.browsermenu.metaconfigure import menuItemDirective
-except ImportError:
-    menuItemDirective = None
+except ImportError: # pragma: no cover
+    menuItemDirective = _fallbackMenuItemDirective
 
 # There are three cases we want to suport:
 #
@@ -45,7 +54,7 @@ except ImportError:
 #
 #     <browser:page
 #         for=".IContact.IContactInfo."
-#         name="info.html" 
+#         name="info.html"
 #         template="info.pt"
 #         class=".ContactInfoView."
 #         permission="zope.View"
@@ -58,7 +67,7 @@ except ImportError:
 #         class=".ContactEditView."
 #         permission="ZopeProducts.Contact.ManageContacts"
 #         >
-# 
+#
 #       <browser:page name="edit.html"       template="edit.pt" />
 #       <browser:page name="editAction.html" attribute="action" />
 #       </browser:pages>
@@ -90,11 +99,17 @@ except ImportError:
 
 # page
 
+def _norm_template(_context, template):
+    template = os.path.abspath(str(_context.path(template)))
+    if not os.path.isfile(template):
+        raise ConfigurationError("No such file", template)
+    return template
+
+
 def page(_context, name, permission, for_=Interface,
          layer=IDefaultBrowserLayer, template=None, class_=None,
          allowed_interface=None, allowed_attributes=None,
-         attribute='__call__', menu=None, title=None, 
-         ):
+         attribute='__call__', menu=None, title=None):
     _handle_menu(_context, menu, title, [for_], name, permission, layer)
     required = {}
 
@@ -108,14 +123,10 @@ def page(_context, name, permission, for_=Interface,
             raise ConfigurationError(
                 "Attribute and template cannot be used together.")
 
-        if not class_:
-            raise ConfigurationError(
-                "A class must be provided if attribute is used")
+        assert class_, "Must have class if attribute is used"
 
     if template:
-        template = os.path.abspath(str(_context.path(template)))
-        if not os.path.isfile(template):
-            raise ConfigurationError("No such file", template)
+        template = _norm_template(_context, template)
         required['__getitem__'] = permission
 
     # TODO: new __name__ attribute must be tested
@@ -161,11 +172,11 @@ def page(_context, name, permission, for_=Interface,
     defineChecker(new_class, Checker(required))
 
     _context.action(
-        discriminator = ('view', (for_, layer), name, IBrowserRequest),
-        callable = handler,
-        args = ('registerAdapter',
-                new_class, (for_, layer), Interface, name, _context.info),
-        )
+        discriminator=('view', (for_, layer), name, IBrowserRequest),
+        callable=handler,
+        args=('registerAdapter',
+              new_class, (for_, layer), Interface, name, _context.info),
+    )
 
 
 # pages, which are just a short-hand for multiple page directives.
@@ -177,13 +188,13 @@ class pages(object):
 
     def __init__(self, _context, permission, for_=Interface,
                  layer=IDefaultBrowserLayer, class_=None,
-                 allowed_interface=None, allowed_attributes=None,
-                 ):
-        self.opts = dict(for_=for_, permission=permission,
-                         layer=layer, class_=class_,
-                         allowed_interface=allowed_interface,
-                         allowed_attributes=allowed_attributes,
-                         )
+                 allowed_interface=None, allowed_attributes=None):
+        self.opts = dict(
+            for_=for_, permission=permission,
+            layer=layer, class_=class_,
+            allowed_interface=allowed_interface,
+            allowed_attributes=allowed_attributes,
+        )
 
     def page(self, _context, name, attribute='__call__', template=None,
              menu=None, title=None):
@@ -209,8 +220,7 @@ class view(object):
     def __init__(self, _context, permission, for_=Interface,
                  name='', layer=IDefaultBrowserLayer, class_=None,
                  allowed_interface=None, allowed_attributes=None,
-                 menu=None, title=None, provides=Interface,
-                 ):
+                 menu=None, title=None, provides=Interface):
 
         _handle_menu(_context, menu, title, [for_], name, permission, layer)
 
@@ -225,9 +235,7 @@ class view(object):
 
     def page(self, _context, name, attribute=None, template=None):
         if template:
-            template = os.path.abspath(_context.path(template))
-            if not os.path.isfile(template):
-                raise ConfigurationError("No such file", template)
+            template = _norm_template(_context, template)
         else:
             if not attribute:
                 raise ConfigurationError(
@@ -296,24 +304,21 @@ class view(object):
 
         if not hasattr(class_, 'browserDefault'):
             if self.default or self.pages:
-                default = self.default or self.pages[0][0]
+                _default = self.default or self.pages[0][0]
                 cdict['browserDefault'] = (
-                    lambda self, request, default=default:
+                    lambda self, request, default=_default:
                     (self, (default, ))
-                    )
+                )
             elif providesCallable(class_):
                 cdict['browserDefault'] = (
                     lambda self, request: (self, ())
-                    )
+                )
 
-        if class_ is not None:
-            bases = (class_, simple)
-        else:
-            bases = (simple,)
+        bases = (simple,) if class_ is None else (class_, simple)
 
         try:
             cname = str(name)
-        except:
+        except Exception: # pragma: no cover
             cname = "GeneratedClass"
 
         cdict['__name__'] = name
@@ -332,46 +337,40 @@ class view(object):
 
         if self.provides is not None:
             _context.action(
-                discriminator = None,
-                callable = provideInterface,
-                args = ('', self.provides)
-                )
+                discriminator=None,
+                callable=provideInterface,
+                args=('', self.provides)
+            )
 
         _context.action(
-            discriminator = ('view', (for_, layer), name, self.provides),
-            callable = handler,
-            args = ('registerAdapter',
-                    newclass, (for_, layer), self.provides, name,
-                    _context.info),
-            )
+            discriminator=('view', (for_, layer), name, self.provides),
+            callable=handler,
+            args=('registerAdapter',
+                  newclass, (for_, layer), self.provides, name,
+                  _context.info),
+        )
 
 def _handle_menu(_context, menu, title, for_, name, permission,
                  layer=IDefaultBrowserLayer):
+    if not menu and not title:
+        # Neither of them
+        return []
 
-    if menu or title:
-        if not (menu and title):
-            raise ConfigurationError(
-                "If either menu or title are specified, they must "
-                "both be specified.")
-        if len(for_) != 1:
-            raise ConfigurationError(
-                "Menus can be specified only for single-view, not for "
-                "multi-views.")
+    if not menu or not title:
+        # Only one or the other
+        raise ConfigurationError(
+            "If either menu or title are specified, they must "
+            "both be specified.")
 
-        if menuItemDirective is None:
-            import warnings
-            warnings.warn_explicit(
-                'Page directive used with "menu" argument, while "zope.browsermenu" '
-                'package is not installed. Doing nothing.',
-                UserWarning,
-                _context.info.file, _context.info.line)
-            return []
-    
-        return menuItemDirective(
-            _context, menu, for_[0], '@@' + name, title,
-            permission=permission, layer=layer)
+    if len(for_) != 1:
+        raise ConfigurationError(
+            "Menus can be specified only for single-view, not for "
+            "multi-views.")
 
-    return []
+    return menuItemDirective(
+        _context, menu, for_[0], '@@' + name, title,
+        permission=permission, layer=layer)
+
 
 def _handle_permission(_context, permission):
     if permission == 'zope.Public':
@@ -385,10 +384,10 @@ def _handle_allowed_interface(_context, allowed_interface, permission,
     if allowed_interface:
         for i in allowed_interface:
             _context.action(
-                discriminator = None,
-                callable = provideInterface,
-                args = (None, i)
-                )
+                discriminator=None,
+                callable=provideInterface,
+                args=(None, i)
+            )
 
             for name in i:
                 required[name] = permission
@@ -403,10 +402,10 @@ def _handle_allowed_attributes(_context, allowed_attributes, permission,
 def _handle_for(_context, for_):
     if for_ is not None:
         _context.action(
-            discriminator = None,
-            callable = provideInterface,
-            args = ('', for_)
-            )
+            discriminator=None,
+            callable=provideInterface,
+            args=('', for_)
+        )
 
 @implementer(IBrowserPublisher)
 class simple(BrowserView):
@@ -435,10 +434,10 @@ def providesCallable(class_):
 
 def expressiontype(_context, name, handler):
     _context.action(
-        discriminator = ("tales:expressiontype", name),
-        callable = registerType,
-        args = (name, handler)
-        )
+        discriminator=("tales:expressiontype", name),
+        callable=registerType,
+        args=(name, handler)
+    )
 
 def registerType(name, handler):
     Engine.registerType(name, handler)
@@ -454,7 +453,7 @@ def clear():
 
 try:
     from zope.testing.cleanup import addCleanUp
-except ImportError:
+except ImportError: # pragma: no cover
     pass
 else:
     addCleanUp(clear)

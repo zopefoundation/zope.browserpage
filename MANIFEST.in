@@ -6,6 +6,8 @@ include tox.ini
 include .travis.yml
 include .coveragerc
 
-recursive-include src *.pt *.txt *.zcml
+recursive-include src *.pt
+recursive-include src *.rst
+recursive-include src *.zcml
 
 global-exclude *.pyc

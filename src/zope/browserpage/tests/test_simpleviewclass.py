@@ -29,7 +29,7 @@ class Test_SimpleTestView(unittest.TestCase):
         context = DummyContext()
         request = TestRequest()
         view = self._makeOne(context, request)
-        macro = view['test']
+        self.assertIsNotNone(view['test'])
         out = view()
         self.assertEqual(out.replace('\r\n', '\n'),
                          '<html>\n'
@@ -51,6 +51,12 @@ class Test_SimpleViewClass(unittest.TestCase):
         view = klass(None, None)
         self.assertEqual(view.__name__, 'test.html')
 
+    def test__used_for__(self):
+        klass = self._makeKlass('testsimpleviewclass.pt',
+                                name='test.html',
+                                used_for=self)
+        self.assertIs(klass.__used_for__, self)
+
     def test___getitem___(self):
         klass = self._makeKlass('testsimpleviewclass.pt', name='test.html')
         view = klass(None, None)
@@ -69,7 +75,7 @@ class Test_SimpleViewClass(unittest.TestCase):
         ob = DummyContext()
         request = TestRequest()
         view = klass(ob, request)
-        macro = view['test']
+        self.assertIsNotNone(view['test'])
         out = view()
         self.assertEqual(out.replace('\r\n', '\n'),
                          '<html>\n'
@@ -140,7 +146,7 @@ class Test_simple(unittest.TestCase):
         self.assertTrue(result is index)
         self.assertEqual(index._called_with, ((), {'foo': 'bar'}))
 
-    def test___call___no_args_no_kw(self):
+    def test___call___w_args_w_kw(self):
         view = self._makeOne()
         view.index = index = DummyTemplate()
         result = view('abc', foo='bar')
