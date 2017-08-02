@@ -1,11 +1,23 @@
-``zope.browserpage``
-====================
+======================
+ ``zope.browserpage``
+======================
+
+.. image:: https://img.shields.io/pypi/v/zope.browserpage.svg
+        :target: https://pypi.python.org/pypi/zope.browserpage/
+        :alt: Latest release
+
+.. image:: https://img.shields.io/pypi/pyversions/zope.browserpage.svg
+        :target: https://pypi.org/project/zope.browserpage/
+        :alt: Supported Python versions
 
 .. image:: https://travis-ci.org/zopefoundation/zope.browserpage.png?branch=master
         :target: https://travis-ci.org/zopefoundation/zope.browserpage
 
+.. image:: https://coveralls.io/repos/github/zopefoundation/zope.browserpage/badge.svg?branch=master
+        :target: https://coveralls.io/github/zopefoundation/zope.browserpage?branch=master
+
 .. note::
-   
+
    This package is at present not reusable without depending on a large
    chunk of the Zope Toolkit and its assumptions. It is maintained by the
    `Zope Toolkit project <http://docs.zope.org/zopetoolkit/>`_.

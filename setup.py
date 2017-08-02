@@ -23,7 +23,6 @@ def read(*rnames):
 long_description = (read('README.rst') + '\n\n' + read('CHANGES.rst'))
 
 def alltests():
-    import os
     import sys
     import unittest
     # use the zope.testrunner machinery to find all the
@@ -37,13 +36,19 @@ def alltests():
     suites = list(zope.testrunner.find.find_suites(options))
     return unittest.TestSuite(suites)
 
+TESTS_REQUIRE = [
+    'zope.browsermenu',
+    'zope.testing',
+    'zope.testrunner',
+]
+
 setup(
     name='zope.browserpage',
     version='4.2.0.dev0',
     url='https://github.com/zopefoundation/zope.browserpage',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
-    classifiers = [
+    classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Zope Public License',
@@ -59,7 +64,7 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: Internet :: WWW/HTTP',
         'Framework :: Zope3',
-        ],
+    ],
     description='ZCML directives for configuring browser views for Zope.',
     long_description=long_description,
     license='ZPL 2.1',
@@ -79,19 +84,13 @@ setup(
         'zope.traversing',
         ],
     extras_require={
-        'menu': ['zope.browsermenu'],
-        'test': [
-          'zope.browsermenu',
-          'zope.testing',
-          'zope.testrunner',
-          ],
-        },
-      tests_require = [
-          'zope.browsermenu',
-          'zope.testing',
-          'zope.testrunner',
-          ],
-      test_suite = '__main__.alltests',
+        'menu': [
+            'zope.browsermenu',
+        ],
+        'test': TESTS_REQUIRE,
+    },
+    tests_require=TESTS_REQUIRE,
+    test_suite='__main__.alltests',
     include_package_data=True,
-    zip_safe = False,
-    )
+    zip_safe=False,
+)

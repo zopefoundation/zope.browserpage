@@ -86,6 +86,5 @@ class BoundPageTemplate(object):
     def __repr__(self):
         return "<BoundPageTemplateFile of %r>" % self.__self__
 
-
 def NoTraverser(ob, request):
     return None

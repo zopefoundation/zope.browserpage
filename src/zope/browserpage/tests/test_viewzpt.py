@@ -20,6 +20,7 @@ from zope.component.testing import PlacelessSetup
 from zope.interface import Interface, implementer
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import BoundPageTemplate
 
 
 class I1(Interface):
@@ -109,8 +110,8 @@ class TestViewZPT(PlacelessSetup, unittest.TestCase):
         response.setHeader('Content-Type', 'application/x-test-junk')
         t(self)
         self.assertEqual(response.getHeader('Content-Type'),
-                          'application/x-test-junk')
-        
+                         'application/x-test-junk')
+
 
 class TestViewZPTContentType(unittest.TestCase):
 
@@ -133,12 +134,42 @@ class TestViewZPTContentType(unittest.TestCase):
         self.assertEqual(t.content_type, "text/xml")
 
 
+class TestBoundPageTemplate(unittest.TestCase):
+
+    def test_call_self_none(self):
+        args = []
+        def func(*a):
+            args.extend(a)
+
+        bpt = BoundPageTemplate(func, None)
+        bpt(self, 1, 2)
+
+        self.assertEqual(args, [self, 1, 2])
+
+    def test_cannot_set_attr(self):
+        bpt = BoundPageTemplate(None, None)
+        with self.assertRaises(AttributeError):
+            bpt.thing = 1
+
+        with self.assertRaises(AttributeError):
+            bpt.__func__ = 1
+
+        with self.assertRaises(AttributeError):
+            bpt.__self__ = 1
+
+    def test_repr(self):
+        ob = "WackyWavingInflatableArmFlailingTubeMan"
+
+        bpt = BoundPageTemplate(None, ob)
+        self.assertEqual(repr(bpt),
+                         "<BoundPageTemplateFile of 'WackyWavingInflatableArmFlailingTubeMan'>")
+
+
+class TestNoTraverser(unittest.TestCase):
+
+    def test_none(self):
+        from zope.browserpage.viewpagetemplatefile import NoTraverser
+        self.assertIsNone(NoTraverser(self, self))
+
 def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestViewZPT))
-    suite.addTest(unittest.makeSuite(TestViewZPTContentType))
-    return suite
-
-
-if __name__ == '__main__':
-    unittest.TextTestRunner().run(test_suite())
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)

@@ -23,7 +23,7 @@ from zope.component.zcml import IBasicViewInformation
 
 try:
     from zope.browsermenu.field import MenuField
-except ImportError: # avoid hard dependency on zope.browsermenu
+except ImportError: # avoid hard dependency on zope.browsermenu pragma: no cover
     MenuField = TextLine
 
 
@@ -81,7 +81,7 @@ class IViewDirective(IPagesDirective):
           the menu in the page directive, rather than having to give a
           separate menuItem directive.  'zmi_views' is the menu most often
           used in the Zope management interface.
-          
+
           This attribute will only work if zope.browsermenu is installed.
           """,
         required=False
