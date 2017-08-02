@@ -44,7 +44,7 @@ TESTS_REQUIRE = [
 
 setup(
     name='zope.browserpage',
-    version='4.2.0.dev0',
+    version='4.2.0',
     url='https://github.com/zopefoundation/zope.browserpage',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
