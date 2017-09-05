@@ -846,6 +846,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         v = component.getMultiAdapter((ob, self.request), name='index.html')
         self.assertEqual(v().strip(), '<html><body><p>test</p></body></html>')
+        # should interfaceToName raise errors for menus with id and interface?
+        component.interface.interfaceToName(object(), ITestMenu)
 
     def testtemplateWClass(self):
         path = os.path.join(tests_path, 'testfiles', 'test2.pt')
