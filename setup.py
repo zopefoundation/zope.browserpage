@@ -64,7 +64,7 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy',
         'Operating System :: OS Independent',
         'Topic :: Internet :: WWW/HTTP',
-        'Framework :: Zope3',
+        'Framework :: Zope :: 3',
     ],
     description='ZCML directives for configuring browser views for Zope.',
     long_description=long_description,
