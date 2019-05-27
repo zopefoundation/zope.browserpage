@@ -14,10 +14,14 @@
 
 import unittest
 
+from zope.interface import Interface
+
 from zope.browserpage.metaconfigure import page
 from zope.browserpage.metaconfigure import view
 from zope.browserpage.metaconfigure import simple
 from zope.browserpage.metaconfigure import _handle_menu
+from zope.browserpage.metaconfigure import _handle_allowed_attributes
+
 from zope.configuration.exceptions import ConfigurationError
 
 class Context(object):
@@ -87,6 +91,41 @@ class TestPage(_AbstractHandlerTest):
         new_class = register[1]
         self.assertEqual(new_class.browserDefault,
                          BrowserDefault.browserDefault)
+
+    def test_class_with_allowed_attributes(self):
+        class BrowserDefault(object):
+            def foo(self):
+                return "bar"
+            def browserDefault(self):
+                raise AssertionError("Not called")
+        context = self._call(
+            class_=BrowserDefault, allowed_attributes=["foo", ])
+
+        action = context.actions[1]
+        register = action['args']
+        new_class = register[1]
+        self.assertEqual(new_class.browserDefault,
+                         BrowserDefault.browserDefault)
+        self.assertEqual(new_class._simple_whitelist, {"foo"})
+
+    def test_class_with_allowed_interface(self):
+        class BrowserDefault(object):
+            def foo(self):
+                return "bar"
+            def browserDefault(self):
+                raise AssertionError("Not called")
+        class IFoo(Interface):
+            def foo():
+                pass
+        context = self._call(
+            class_=BrowserDefault, allowed_interface=[IFoo])
+
+        action = context.actions[2]
+        register = action['args']
+        new_class = register[1]
+        self.assertEqual(new_class.browserDefault,
+                         BrowserDefault.browserDefault)
+        self.assertEqual(new_class._simple_whitelist, {"foo"})
 
     def test_class_implements(self):
         from zope.publisher.interfaces.browser import IBrowserPublisher
@@ -249,8 +288,16 @@ class TestSimple(unittest.TestCase):
 
     def test_publish_not_found(self):
         sview = simple(None, None)
+        sview.foo = lambda: "bar"
         with self.assertRaises(LookupError):
-            sview.publishTraverse(None, None)
+            sview.publishTraverse(None, "foo")
+
+    def test_publish_whitelist(self):
+        sview = simple(None, None)
+        sview.foo = lambda: "bar"
+        sview._simple_whitelist = {"foo", }
+        foo = sview.publishTraverse(None, "foo")
+        self.assertEqual(foo(), "bar")
 
     def test_recursive_call(self):
         sview = simple(None, None)

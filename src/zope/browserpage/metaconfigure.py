@@ -168,6 +168,7 @@ def page(_context, name, permission, for_=Interface,
                                required)
 
     _handle_for(_context, for_)
+    new_class._simple_whitelist = set(required) - set([attribute, 'browserDefault', '__call__', 'publishTraverse'])
 
     defineChecker(new_class, Checker(required))
 
@@ -411,7 +412,12 @@ def _handle_for(_context, for_):
 class simple(BrowserView):
 
     def publishTraverse(self, request, name):
-        raise NotFound(self, name, request)
+        if name in getattr(self, "_simple_whitelist", []):
+            self.__page_attribute__ = name
+            self.__call__ = simple.__call__
+            return self
+        else:
+            raise NotFound(self, name, request)
 
     def __call__(self, *a, **k):
         # If a class doesn't provide it's own call, then get the attribute

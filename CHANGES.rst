@@ -5,7 +5,7 @@
 4.3.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Fix regression in allowed_attributes and allowed_interface
 
 
 4.3.0 (2018-10-05)
