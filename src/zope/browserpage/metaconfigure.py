@@ -414,7 +414,7 @@ class simple(BrowserView):
     def publishTraverse(self, request, name):
         if name in getattr(self, "_simple_whitelist", []):
             self.__page_attribute__ = name
-            self.__call__ = simple.__call__
+            self.__call__ = simple.__call__.__get__(self, simple)
             return self
         else:
             raise NotFound(self, name, request)
