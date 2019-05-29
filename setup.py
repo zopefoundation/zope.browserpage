@@ -16,11 +16,14 @@
 import os
 from setuptools import setup, find_packages
 
+
 def read(*rnames):
     with open(os.path.join(os.path.dirname(__file__), *rnames)) as f:
         return f.read()
 
+
 long_description = (read('README.rst') + '\n\n' + read('CHANGES.rst'))
+
 
 def alltests():
     import sys
@@ -36,6 +39,7 @@ def alltests():
     suites = list(zope.testrunner.find.find_suites(options))
     return unittest.TestSuite(suites)
 
+
 TESTS_REQUIRE = [
     'zope.browsermenu',
     'zope.testing',
@@ -44,7 +48,7 @@ TESTS_REQUIRE = [
 
 setup(
     name='zope.browserpage',
-    version='4.3.1.dev0',
+    version='4.4.0.dev0',
     url='https://github.com/zopefoundation/zope.browserpage',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
@@ -56,7 +60,6 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',

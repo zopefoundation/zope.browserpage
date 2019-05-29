@@ -414,8 +414,8 @@ class simple(BrowserView):
     def __call__(self, *a, **k):
         # If a class doesn't provide it's own call, then get the attribute
         attr = self.__page_attribute__
-        if attr == 'browserDefault':
-            raise AttributeError("browserDefault")
+        if attr == '__call__':
+            raise AttributeError("__call__")
 
         meth = getattr(self, attr)
         return meth(*a, **k)
@@ -429,7 +429,7 @@ class simple(BrowserView):
             raise AttributeError("browserDefault")
 
         meth = getattr(self, attr)
-        return meth(*a, **k)
+        return (meth, "")
 
 def providesCallable(class_):
     if hasattr(class_, '__call__'):
