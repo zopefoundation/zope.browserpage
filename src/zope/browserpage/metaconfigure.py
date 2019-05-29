@@ -140,14 +140,7 @@ def page(_context, name, permission, for_=Interface,
             # class and template
             new_class = SimpleViewClass(template, bases=(class_, ), name=name)
         else:
-            if not hasattr(class_, 'browserDefault'):
-                cdict = {
-                    'browserDefault':
-                    lambda self, request: (getattr(self, attribute), ())
-                    }
-            else:
-                cdict = {}
-
+            cdict = {}
             cdict['__name__'] = name
             cdict['__page_attribute__'] = attribute
             new_class = type(class_.__name__, (class_, simple,), cdict)
@@ -414,18 +407,26 @@ class simple(BrowserView):
     def publishTraverse(self, request, name):
         if name in getattr(self, "_simple_whitelist", []):
             self.__page_attribute__ = name
-            self.__call__ = simple.__call__.__get__(self, simple)
             return self
         else:
             raise NotFound(self, name, request)
 
     def __call__(self, *a, **k):
         # If a class doesn't provide it's own call, then get the attribute
-        # given by the browser default.
+        attr = self.__page_attribute__
+        if attr == 'browserDefault':
+            raise AttributeError("browserDefault")
+
+        meth = getattr(self, attr)
+        return meth(*a, **k)
+
+    def browserDefault(self, request):
+        # If a class doesn't provide it's own browserDefault, then get the attribute
+        # given by the __page_attribute__.
 
         attr = self.__page_attribute__
-        if attr == '__call__':
-            raise AttributeError("__call__")
+        if attr == 'browserDefault':
+            raise AttributeError("browserDefault")
 
         meth = getattr(self, attr)
         return meth(*a, **k)
