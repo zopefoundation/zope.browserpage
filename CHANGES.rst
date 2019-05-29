@@ -2,10 +2,13 @@
  Changes
 =========
 
-4.3.1 (unreleased)
+4.4.0 (unreleased)
 ==================
 
-- Fix regression in allowed_attributes and allowed_interface
+- Fix regression in allowed_attributes and allowed_interface:
+  https://github.com/zopefoundation/zope.browserpage/pull/7
+
+- Drop support for Python 3.4.
 
 
 4.3.0 (2018-10-05)
