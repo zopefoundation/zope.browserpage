@@ -560,7 +560,11 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
-        self.assertEqual(getattr(view, 'browserDefault', None), None)
+        with self.assertRaises(AttributeError) as ctx:
+            view.browserDefault(self.request)
+        self.assertEqual(
+            str(ctx.exception),
+            "'test' object has no attribute '__page_attribute__'")
 
     def testNamedViewPageViewsNoDefault(self):
         self.assertEqual(
