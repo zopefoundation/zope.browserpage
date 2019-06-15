@@ -106,7 +106,7 @@ class TestPage(_AbstractHandlerTest):
         new_class = register[1]
         self.assertEqual(new_class.browserDefault,
                          BrowserDefault.browserDefault)
-        self.assertEqual(new_class._simple_whitelist, {"foo"})
+        self.assertEqual(new_class._simple__whitelist, {"foo"})
 
     def test_class_with_allowed_interface(self):
         class BrowserDefault(object):
@@ -125,7 +125,7 @@ class TestPage(_AbstractHandlerTest):
         new_class = register[1]
         self.assertEqual(new_class.browserDefault,
                          BrowserDefault.browserDefault)
-        self.assertEqual(new_class._simple_whitelist, {"foo"})
+        self.assertEqual(new_class._simple__whitelist, {"foo"})
 
     def test_class_implements(self):
         from zope.publisher.interfaces.browser import IBrowserPublisher
@@ -295,7 +295,7 @@ class TestSimple(unittest.TestCase):
     def test_publish_whitelist(self):
         sview = simple(None, None)
         sview.foo = lambda: "bar"
-        sview._simple_whitelist = {"foo", }
+        sview._simple__whitelist = {"foo", }
         foo = sview.publishTraverse(None, "foo")
         self.assertEqual(foo(), "bar")
 
