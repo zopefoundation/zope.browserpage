@@ -404,6 +404,8 @@ def _handle_for(_context, for_):
 @implementer(IBrowserPublisher)
 class simple(BrowserView):
 
+    __page_attribute__ = '__call__'
+
     def publishTraverse(self, request, name):
         if name in getattr(self, "_simple__whitelist", []):
             self.__page_attribute__ = name
