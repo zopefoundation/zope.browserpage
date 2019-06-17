@@ -426,7 +426,8 @@ class simple(BrowserView):
 
         attr = self.__page_attribute__
         if attr == 'browserDefault':
-            raise AttributeError("browserDefault")
+            # safety guard against recursion error:
+            raise AttributeError("browserDefault")  # pragma: no cover
 
         meth = getattr(self, attr)
         return (meth, "")

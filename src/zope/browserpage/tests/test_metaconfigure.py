@@ -42,7 +42,8 @@ class Context(object):
 class _AbstractHandlerTest(unittest.TestCase):
 
     if not hasattr(unittest.TestCase, 'assertRaisesRegex'):
-        assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+        # PY2:
+        assertRaisesRegex = unittest.TestCase.assertRaisesRegexp  # pragma: no cover
 
     def setUp(self):
         self.context = Context()
@@ -95,7 +96,8 @@ class TestPage(_AbstractHandlerTest):
     def test_class_with_allowed_attributes(self):
         class BrowserDefault(object):
             def foo(self):
-                return "bar"
+                raise AssertionError("foo called")
+
             def browserDefault(self):
                 raise AssertionError("Not called")
         context = self._call(
@@ -111,7 +113,7 @@ class TestPage(_AbstractHandlerTest):
     def test_class_with_allowed_interface(self):
         class BrowserDefault(object):
             def foo(self):
-                return "bar"
+                raise AssertionError("foo called")
             def browserDefault(self):
                 raise AssertionError("Not called")
         class IFoo(Interface):
