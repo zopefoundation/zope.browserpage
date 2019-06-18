@@ -2,7 +2,7 @@
  Changes
 =========
 
-4.4.0 (unreleased)
+4.4.0 (2019-06-18)
 ==================
 
 - Fix regression in ``allowed_attributes`` and ``allowed_interface``.
