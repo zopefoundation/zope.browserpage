@@ -9,3 +9,4 @@ exclude_lines =
     raise NotImplementedError
     self.fail
     raise AssertionError
+    class I[A-Z]\w+\(Interface\):

@@ -560,7 +560,11 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
-        self.assertEqual(getattr(view, 'browserDefault', None), None)
+        browser_default = view.browserDefault(self.request)
+        self.assertEqual(browser_default[1], '')
+        with self.assertRaises(AttributeError) as ctx:
+            browser_default[0]()
+        self.assertEqual(str(ctx.exception), "__call__")
 
     def testNamedViewPageViewsNoDefault(self):
         self.assertEqual(
