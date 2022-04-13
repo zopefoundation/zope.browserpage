@@ -15,4 +15,5 @@
 """
 from zope.browserpage.simpleviewclass import SimpleViewClass
 
+
 SimpleTestView = SimpleViewClass('testsimpleviewclass.pt')

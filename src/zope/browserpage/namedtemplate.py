@@ -14,12 +14,16 @@
 """
 """
 
-from zope import component, interface
 import zope.traversing.interfaces
+
+from zope import component
+from zope import interface
+
 
 class INamedTemplate(interface.Interface):
     """A template that is looked up by name
     """
+
 
 class NamedTemplateImplementation(object):
 
@@ -29,7 +33,7 @@ class NamedTemplateImplementation(object):
         except AttributeError:
             raise TypeError(
                 "NamedTemplateImplementation must be passed a descriptor."
-                )
+            )
         self.descriptor = descriptor
         interface.implementer(INamedTemplate)(self)
 

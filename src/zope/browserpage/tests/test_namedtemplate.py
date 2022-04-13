@@ -17,21 +17,22 @@ import os
 import os.path
 import unittest
 
-from zope.browserpage import namedtemplate
-
 import zope.component.testing
 import zope.traversing.adapters
+
+from zope.browserpage import namedtemplate
+
 
 class TestImplementation(unittest.TestCase):
 
     def test_call(self):
         inst = namedtemplate.implementation(None)
 
-
         nt = namedtemplate.NamedTemplate('name')
         nti = inst(nt)
 
         self.assertEqual(nti.descriptor, nt)
+
 
 class TestNamedTemplateImplementation(unittest.TestCase):
 
@@ -58,6 +59,7 @@ class TestNamedTemplate(unittest.TestCase):
         with self.assertRaises(LookupError):
             X.nt(X())
 
+
 class TestNamedTemplatePathAdapter(unittest.TestCase):
 
     def test_getitem_no_adapter(self):
@@ -66,6 +68,7 @@ class TestNamedTemplatePathAdapter(unittest.TestCase):
 
         with self.assertRaises(LookupError):
             _ = adapter['name']
+
 
 def pageSetUp(test):
     zope.component.testing.setUp(test)
@@ -83,6 +86,7 @@ def test_suite():
         doctest.DocFileSuite(
             filename,
             setUp=pageSetUp, tearDown=zope.component.testing.tearDown,
-            globs={'__file__':  os.path.abspath(os.path.join(os.path.dirname(__file__), filename))}
+            globs={'__file__':  os.path.abspath(
+                os.path.join(os.path.dirname(__file__), filename))}
         )
     ])

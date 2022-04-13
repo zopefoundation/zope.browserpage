@@ -15,5 +15,6 @@
 """
 from zope.browserpage import ViewPageTemplateFile
 
+
 class C(object):
     index = ViewPageTemplateFile('test.pt')

@@ -15,6 +15,7 @@
 """
 import unittest
 
+
 class Test_SimpleTestView(unittest.TestCase):
 
     def _getTargetClass(self):
@@ -36,6 +37,7 @@ class Test_SimpleTestView(unittest.TestCase):
                          '  <body>\n'
                          '    <p>hello world</p>\n'
                          '  </body>\n</html>\n')
+
 
 class Test_SimpleViewClass(unittest.TestCase):
 
@@ -65,6 +67,7 @@ class Test_SimpleViewClass(unittest.TestCase):
 
     def test_w_base_classes(self):
         from zope.publisher.browser import TestRequest
+
         class BaseClass(object):
             pass
 
@@ -82,6 +85,7 @@ class Test_SimpleViewClass(unittest.TestCase):
                          '  <body>\n'
                          '    <p>hello world</p>\n'
                          '  </body>\n</html>\n')
+
 
 class Test_simple(unittest.TestCase):
 
@@ -157,17 +161,21 @@ class Test_simple(unittest.TestCase):
 class DummyContext:
     pass
 
+
 class DummyResponse:
     pass
+
 
 class DummyRequest:
     debug = False
     response = DummyResponse()
 
+
 class DummyTemplate:
     def __call__(self, *args, **kw):
         self._called_with = (args, kw)
         return self
+
 
 def test_suite():
     return unittest.TestSuite((

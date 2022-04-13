@@ -13,17 +13,21 @@
 ##############################################################################
 """ZCML directives for defining browser pages
 """
+from zope.component.zcml import IBasicViewInformation
+from zope.configuration.fields import GlobalInterface
+from zope.configuration.fields import GlobalObject
+from zope.configuration.fields import MessageID
+from zope.configuration.fields import Path
+from zope.configuration.fields import PythonIdentifier
 from zope.interface import Interface
-from zope.configuration.fields import GlobalObject, GlobalInterface
-from zope.configuration.fields import Path, PythonIdentifier, MessageID
 from zope.schema import TextLine
 from zope.security.zcml import Permission
 
-from zope.component.zcml import IBasicViewInformation
 
 try:
     from zope.browsermenu.field import MenuField
-except ImportError: # avoid hard dependency on zope.browsermenu pragma: no cover
+except ImportError:  # pragma: no cover
+    # avoid hard dependency on zope.browsermenu
     MenuField = TextLine
 
 
@@ -39,20 +43,21 @@ class IPagesDirective(IBasicViewInformation):
     for_ = GlobalObject(
         title=u"The interface or class this view is for.",
         required=False
-        )
+    )
 
     layer = GlobalObject(
         title=u"The request interface or class this view is for.",
-        description=
-        u"Defaults to zope.publisher.interfaces.browser.IDefaultBrowserLayer.",
+        description=u"Defaults to "
+                    u"zope.publisher.interfaces.browser.IDefaultBrowserLayer.",
         required=False
-        )
+    )
 
     permission = Permission(
         title=u"Permission",
         description=u"The permission needed to use the view.",
         required=True
-        )
+    )
+
 
 class IViewDirective(IPagesDirective):
     """
@@ -65,14 +70,14 @@ class IViewDirective(IPagesDirective):
     for_ = GlobalInterface(
         title=u"The interface this view is for.",
         required=False
-        )
+    )
 
     name = TextLine(
         title=u"The name of the view.",
         description=u"The name shows up in URLs/paths. For example 'foo'.",
         required=False,
         default=u'',
-        )
+    )
 
     menu = MenuField(
         title=u"The browser menu to include the page (view) in.",
@@ -85,7 +90,7 @@ class IViewDirective(IPagesDirective):
           This attribute will only work if zope.browsermenu is installed.
           """,
         required=False
-        )
+    )
 
     title = MessageID(
         title=u"The browser menu label for the page (view)",
@@ -96,7 +101,7 @@ class IViewDirective(IPagesDirective):
           This attribute will only work if zope.browsermenu is installed.
           """,
         required=False
-        )
+    )
 
     provides = GlobalInterface(
         title=u"The interface this view provides.",
@@ -105,7 +110,8 @@ class IViewDirective(IPagesDirective):
         views that support other views.""",
         required=False,
         default=Interface,
-        )
+    )
+
 
 class IViewPageSubdirective(Interface):
     """
@@ -122,7 +128,7 @@ class IViewPageSubdirective(Interface):
         such as '.html'. If you do have sub pages and you want to
         provide a view name, you shouldn't use extensions.""",
         required=True
-        )
+    )
 
     attribute = PythonIdentifier(
         title=u"The name of the view attribute implementing the page.",
@@ -130,7 +136,7 @@ class IViewPageSubdirective(Interface):
         This refers to the attribute (method) on the view that is
         implementing a specific sub page.""",
         required=False
-        )
+    )
 
     template = Path(
         title=u"The name of a template that implements the page.",
@@ -138,7 +144,8 @@ class IViewPageSubdirective(Interface):
         Refers to a file containing a page template (should end in
         extension '.pt' or '.html').""",
         required=False
-        )
+    )
+
 
 class IViewDefaultPageSubdirective(Interface):
     """
@@ -153,7 +160,7 @@ class IViewDefaultPageSubdirective(Interface):
         is supplied, the default page will be the first page
         listed.""",
         required=True
-        )
+    )
 
 
 class IPagesPageSubdirective(IViewPageSubdirective):
@@ -171,7 +178,7 @@ class IPagesPageSubdirective(IViewPageSubdirective):
         This attribute will only work if zope.browsermenu is installed.
         """,
         required=False
-        )
+    )
 
     title = MessageID(
         title=u"The browser menu label for the page (view)",
@@ -182,7 +189,8 @@ class IPagesPageSubdirective(IViewPageSubdirective):
         This attribute will only work if zope.browsermenu is installed.
         """,
         required=False
-        )
+    )
+
 
 class IPageDirective(IPagesDirective, IPagesPageSubdirective):
     """
@@ -193,6 +201,7 @@ class IPageDirective(IPagesDirective, IPagesPageSubdirective):
     and/or class and registers it.
     """
 
+
 class IExpressionTypeDirective(Interface):
     """Register a new TALES expression type"""
 
@@ -201,11 +210,11 @@ class IExpressionTypeDirective(Interface):
         description=u"""Name of the expression. This will also be used
         as the prefix in actual TALES expressions.""",
         required=True
-        )
+    )
 
     handler = GlobalObject(
         title=u"Handler",
         description=u"""Handler is class that implements
         zope.tales.interfaces.ITALESExpression.""",
         required=True
-        )
+    )

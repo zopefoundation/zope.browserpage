@@ -18,30 +18,31 @@ import os
 import unittest
 from io import StringIO
 
-from zope import component
-from zope.interface import Interface, implementer, directlyProvides
-
+import zope.browsermenu
+import zope.publisher.defaultview
 import zope.security.management
-from zope.configuration.xmlconfig import xmlconfig, XMLConfig
+from zope.browsermenu.interfaces import IMenuItemType
+from zope.browsermenu.menu import getFirstMenuItem
 from zope.configuration.exceptions import ConfigurationError
+from zope.configuration.xmlconfig import XMLConfig
+from zope.configuration.xmlconfig import xmlconfig
+from zope.interface import Interface
+from zope.interface import directlyProvides
+from zope.interface import implementer
 from zope.publisher.browser import TestRequest
-
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
-
-from zope.security.proxy import removeSecurityProxy, ProxyFactory
-from zope.security.permission import Permission
 from zope.security.interfaces import IPermission
+from zope.security.permission import Permission
+from zope.security.proxy import ProxyFactory
+from zope.security.proxy import removeSecurityProxy
 from zope.testing import cleanup
 from zope.traversing.adapters import DefaultTraversable
 from zope.traversing.interfaces import ITraversable
 
-import zope.publisher.defaultview
 import zope.browserpage
-import zope.browsermenu
-from zope.browsermenu.menu import getFirstMenuItem
-from zope.browsermenu.interfaces import IMenuItemType
-#from zope.component.testfiles.views import IC, V1, VZMI, R1, IV
+from zope import component
+
 
 tests_path = os.path.dirname(__file__)
 
@@ -52,19 +53,24 @@ template = u"""<configure
    %s
    </configure>"""
 
+
 class templateclass(object):
     def data(self):
         return 42
 
+
 class IR(Interface):
     pass
+
 
 class IV(Interface):
     def index():
         "A method"
 
+
 class IC(Interface):
     pass
+
 
 @implementer(IV)
 class V1(object):
@@ -79,16 +85,20 @@ class V1(object):
     def action(self):
         return 'done'
 
+
 class VZMI(V1):
     def index(self):
         raise AssertionError("Not called")
+
 
 @implementer(IV)
 class R1(object):
     pass
 
+
 class RZMI(R1):
     pass
+
 
 class V2(V1, object):
 
@@ -98,15 +108,19 @@ class V2(V1, object):
     def action2(self):
         return "done"
 
+
 class VT(V1, object):
     def publishTraverse(self, request, name):
         raise AssertionError("Not called")
+
 
 @implementer(IC)
 class Ob(object):
     pass
 
+
 ob = Ob()
+
 
 class NCV(object):
     "non callable view"
@@ -114,8 +128,10 @@ class NCV(object):
     def __init__(self, context, request):
         pass
 
+
 class CV(NCV):
     "callable view"
+
     def __call__(self):
         raise AssertionError("Not called")
 
@@ -126,8 +142,10 @@ class C_w_implements(NCV):
     def index(self):
         return self
 
+
 class ITestLayer(IBrowserRequest):
     """Test Layer."""
+
 
 class ITestSkin(ITestLayer):
     """Test Skin."""
@@ -136,7 +154,9 @@ class ITestSkin(ITestLayer):
 class ITestMenu(Interface):
     """Test menu."""
 
+
 directlyProvides(ITestMenu, IMenuItemType)
+
 
 class Test(cleanup.CleanUp, unittest.TestCase):
 
@@ -163,18 +183,16 @@ class Test(cleanup.CleanUp, unittest.TestCase):
                 attribute="index"
                 />
             '''
-            )))
+        )))
 
         v = component.queryMultiAdapter((ob, self.request), name='test')
         self.assertTrue(issubclass(v.__class__, V1))
-
 
     def testPageWithClassWithMenu(self):
         self.assertEqual(
             component.queryMultiAdapter((ob, self.request), name='test'),
             None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
-
 
         xmlconfig(StringIO(template % (
             '''
@@ -190,14 +208,13 @@ class Test(cleanup.CleanUp, unittest.TestCase):
                 title="Test View"
                 />
             ''' % testtemplate
-            )))
+        )))
         menuItem = getFirstMenuItem('test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = component.queryMultiAdapter((ob, self.request), name='test')
         self.assertEqual(v().replace('\r\n', '\n'),
                          "<html><body><p>test</p></body></html>\n")
-
 
     def testPageWithTemplateWithMenu(self):
         self.assertEqual(
@@ -218,7 +235,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
                 title="Test View"
                 />
             ''' % testtemplate
-            )))
+        )))
 
         menuItem = getFirstMenuItem('test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
@@ -226,7 +243,6 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         v = component.queryMultiAdapter((ob, self.request), name='test')
         self.assertEqual(v().replace('\r\n', '\n'),
                          "<html><body><p>test</p></body></html>\n")
-
 
     def testPageInPagesWithTemplateWithMenu(self):
         self.assertEqual(
@@ -249,7 +265,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
                   />
             </browser:pages>
             ''' % testtemplate
-            )))
+        )))
 
         menuItem = getFirstMenuItem('test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
@@ -257,7 +273,6 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         v = component.queryMultiAdapter((ob, self.request), name='test')
         self.assertEqual(v().replace('\r\n', '\n'),
                          "<html><body><p>test</p></body></html>\n")
-
 
     def testPageInPagesWithClassWithMenu(self):
         self.assertEqual(
@@ -281,7 +296,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
                   />
             </browser:pages>
             ''' % testtemplate
-            )))
+        )))
 
         menuItem = getFirstMenuItem('test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
@@ -319,7 +334,6 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         v = component.queryMultiAdapter(
             (ob, TestRequest(skin=ITestSkin)), name='test')
         self.assertTrue(issubclass(v.__class__, VZMI))
-
 
     def testInterfaceProtectedPage(self):
         xmlconfig(StringIO(
@@ -455,7 +469,6 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             '''
             ))
 
-
     def testPageViews(self):
         self.assertEqual(
             component.queryMultiAdapter((ob, self.request), name='test'),
@@ -509,8 +522,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
-        self.assertEqual(view.browserDefault(self.request)[1], (u'index.html', ))
-
+        self.assertEqual(view.browserDefault(
+            self.request)[1], (u'index.html', ))
 
         v = view.publishTraverse(self.request, 'index.html')
         v = removeSecurityProxy(v)
@@ -518,7 +531,6 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         v = view.publishTraverse(self.request, 'action.html')
         v = removeSecurityProxy(v)
         self.assertEqual(v(), 'done')
-
 
     def testNamedViewNoPagesForCallable(self):
         self.assertEqual(
@@ -591,8 +603,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
-        self.assertEqual(view.browserDefault(self.request)[1], (u'index.html', ))
-
+        self.assertEqual(view.browserDefault(
+            self.request)[1], (u'index.html', ))
 
         v = view.publishTraverse(self.request, 'index.html')
         v = removeSecurityProxy(v)
@@ -631,8 +643,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
-        self.assertEqual(view.browserDefault(self.request)[1], (u'test.html', ))
-
+        self.assertEqual(view.browserDefault(
+            self.request)[1], (u'test.html', ))
 
         v = view.publishTraverse(self.request, 'index.html')
         v = removeSecurityProxy(v)
@@ -757,7 +769,8 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         ))
 
         view = component.getMultiAdapter((ob, self.request), name='test')
-        self.assertEqual(view.browserDefault(self.request)[1], (u'index.html', ))
+        self.assertEqual(view.browserDefault(
+            self.request)[1], (u'index.html', ))
 
         v = view.publishTraverse(self.request, 'index.html')
         self.assertEqual(v(), 'V1 here')
@@ -794,7 +807,6 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         v = component.getMultiAdapter((ob, TestRequest(skin=ITestSkin)),
                                       name='index.html')
         self.assertEqual(v(), 'done')
-
 
     def test_template_page(self):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
@@ -846,7 +858,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
                 template="%s"
                 layer="zope.browserpage.tests.test_page.ITestLayer"/>
             ''' % (path, path)
-            ))
+        ))
 
         v = component.getMultiAdapter((ob, self.request), name='index.html')
         self.assertEqual(v().strip(), '<html><body><p>test</p></body></html>')
@@ -916,7 +928,6 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         v = component.getMultiAdapter((ob, request), name='index.html')
         v = ProxyFactory(v)
         self.assertEqual(v().strip(), '<html><body><p>test</p></body></html>')
-
 
     def testtemplateNoName(self):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')

@@ -17,22 +17,26 @@ import unittest
 
 from zope.component import getGlobalSiteManager
 from zope.component.testing import PlacelessSetup
-from zope.interface import Interface, implementer
+from zope.interface import Interface
+from zope.interface import implementer
 
-from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.browserpage.viewpagetemplatefile import BoundPageTemplate
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 
 class I1(Interface):
     pass
 
+
 @implementer(I1)
 class C1(object):
     pass
 
+
 class InstanceWithContext(object):
     def __init__(self, context):
         self.context = context
+
 
 class InstanceWithoutContext(object):
     pass
@@ -61,6 +65,7 @@ class TestViewZPT(PlacelessSetup, unittest.TestCase):
     def testViewMapper(self):
         the_view = "This is the view"
         the_view_name = "some view name"
+
         def ViewMaker(*args, **kw):
             return the_view
 
@@ -138,6 +143,7 @@ class TestBoundPageTemplate(unittest.TestCase):
 
     def test_call_self_none(self):
         args = []
+
         def func(*a):
             args.extend(a)
 
@@ -161,8 +167,10 @@ class TestBoundPageTemplate(unittest.TestCase):
         ob = "WackyWavingInflatableArmFlailingTubeMan"
 
         bpt = BoundPageTemplate(None, ob)
-        self.assertEqual(repr(bpt),
-                         "<BoundPageTemplateFile of 'WackyWavingInflatableArmFlailingTubeMan'>")
+        self.assertEqual(
+            repr(bpt),
+            "<BoundPageTemplateFile of"
+            " 'WackyWavingInflatableArmFlailingTubeMan'>")
 
 
 class TestNoTraverser(unittest.TestCase):
@@ -170,6 +178,7 @@ class TestNoTraverser(unittest.TestCase):
     def test_none(self):
         from zope.browserpage.viewpagetemplatefile import NoTraverser
         self.assertIsNone(NoTraverser(self, self))
+
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

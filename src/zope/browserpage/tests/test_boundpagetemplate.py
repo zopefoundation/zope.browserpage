@@ -15,6 +15,7 @@
 """
 import unittest
 
+
 class Test(unittest.TestCase):
 
     def testAttributes(self):
@@ -26,9 +27,9 @@ class Test(unittest.TestCase):
         self.assertEqual(C.index.filename, C.index.__func__.filename)
 
 
-
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
+
 
 if __name__ == '__main__':
     unittest.TextTestRunner().run(test_suite())
