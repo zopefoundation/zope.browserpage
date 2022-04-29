@@ -15,20 +15,12 @@
 """
 import unittest
 
+
 class Test(unittest.TestCase):
 
     def testAttributes(self):
-
         from zope.browserpage.tests.sample import C
 
         C.index.__func__.foo = 1
         self.assertEqual(C.index.macros, C.index.__func__.macros)
         self.assertEqual(C.index.filename, C.index.__func__.filename)
-
-
-
-def test_suite():
-    return unittest.defaultTestLoader.loadTestsFromName(__name__)
-
-if __name__ == '__main__':
-    unittest.TextTestRunner().run(test_suite())

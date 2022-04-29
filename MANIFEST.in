@@ -1,13 +1,12 @@
+# Generated from:
+# https://github.com/zopefoundation/meta/tree/master/config/pure-python
+include *.md
 include *.rst
 include *.txt
-include *.py
 include buildout.cfg
 include tox.ini
-include .travis.yml
-include .coveragerc
 
+recursive-include src *.py
 recursive-include src *.pt
 recursive-include src *.rst
 recursive-include src *.zcml
-
-global-exclude *.pyc

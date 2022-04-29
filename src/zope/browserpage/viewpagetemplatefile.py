@@ -16,8 +16,9 @@
 __docformat__ = 'restructuredtext'
 
 from zope.component import getMultiAdapter
-from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from zope.pagetemplate.engine import TrustedAppPT
+from zope.pagetemplate.pagetemplatefile import PageTemplateFile
+
 
 class ViewPageTemplateFile(TrustedAppPT, PageTemplateFile):
     """Page Templates used as methods of views defined as Python classes.
@@ -47,7 +48,7 @@ class ViewPageTemplateFile(TrustedAppPT, PageTemplateFile):
             namespace,
             showtal=getattr(debug_flags, 'showTAL', 0),
             sourceAnnotations=getattr(debug_flags, 'sourceAnnotations', 0),
-            )
+        )
         response = instance.request.response
         if not response.getHeader("Content-Type"):
             response.setHeader("Content-Type", self.content_type)
@@ -55,6 +56,7 @@ class ViewPageTemplateFile(TrustedAppPT, PageTemplateFile):
 
     def __get__(self, instance, type):
         return BoundPageTemplate(self, instance)
+
 
 class ViewMapper(object):
     def __init__(self, ob, request):
@@ -85,6 +87,7 @@ class BoundPageTemplate(object):
 
     def __repr__(self):
         return "<BoundPageTemplateFile of %r>" % self.__self__
+
 
 def NoTraverser(ob, request):
     return None

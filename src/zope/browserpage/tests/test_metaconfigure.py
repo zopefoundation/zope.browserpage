@@ -14,15 +14,14 @@
 
 import unittest
 
+from zope.configuration.exceptions import ConfigurationError
 from zope.interface import Interface
 
-from zope.browserpage.metaconfigure import page
-from zope.browserpage.metaconfigure import view
-from zope.browserpage.metaconfigure import simple
 from zope.browserpage.metaconfigure import _handle_menu
-from zope.browserpage.metaconfigure import _handle_allowed_attributes
+from zope.browserpage.metaconfigure import page
+from zope.browserpage.metaconfigure import simple
+from zope.browserpage.metaconfigure import view
 
-from zope.configuration.exceptions import ConfigurationError
 
 class Context(object):
 
@@ -39,11 +38,12 @@ class Context(object):
     def action(self, **kwargs):
         self.actions.append(kwargs)
 
+
 class _AbstractHandlerTest(unittest.TestCase):
 
-    if not hasattr(unittest.TestCase, 'assertRaisesRegex'):
+    if not hasattr(unittest.TestCase, 'assertRaisesRegex'):  # pragma: no cover
         # PY2:
-        assertRaisesRegex = unittest.TestCase.assertRaisesRegexp  # pragma: no cover
+        assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
 
     def setUp(self):
         self.context = Context()
@@ -56,6 +56,7 @@ class _AbstractHandlerTest(unittest.TestCase):
     def _check_raises(self, regex, **kwargs):
         with self.assertRaisesRegex(ConfigurationError, regex):
             self._call(**kwargs)
+
 
 class TestPage(_AbstractHandlerTest):
 
@@ -114,8 +115,10 @@ class TestPage(_AbstractHandlerTest):
         class BrowserDefault(object):
             def foo(self):
                 raise AssertionError("foo called")
+
             def browserDefault(self):
                 raise AssertionError("Not called")
+
         class IFoo(Interface):
             def foo():
                 pass
@@ -131,6 +134,7 @@ class TestPage(_AbstractHandlerTest):
 
     def test_class_implements(self):
         from zope.publisher.interfaces.browser import IBrowserPublisher
+
         from zope import interface
 
         class Class(object):
@@ -146,6 +150,7 @@ class TestPage(_AbstractHandlerTest):
         new_class = register[1]
         self.assertIn(IBrowserPublisher, interface.implementedBy(new_class))
 
+
 class TestViewPage(_AbstractHandlerTest):
 
     view = None
@@ -157,6 +162,7 @@ class TestViewPage(_AbstractHandlerTest):
     def test_no_attribute(self):
         self._check_raises(
             "Must specify either a template or an attribute name")
+
 
 class TestView(_AbstractHandlerTest):
 
@@ -240,6 +246,7 @@ class TestView(_AbstractHandlerTest):
         self.assertTrue(hasattr(new_class, 'foo'))
         self.assertTrue(hasattr(new_class, 'page_name'))
 
+
 class TestHandleMenu(_AbstractHandlerTest):
 
     def _call(self, **kwargs):
@@ -271,20 +278,24 @@ class TestHandleMenu(_AbstractHandlerTest):
         )
 
     def test_no_directive(self):
-        from zope.browserpage import metaconfigure
         import warnings
+
+        from zope.browserpage import metaconfigure
         menuItemDirective = metaconfigure.menuItemDirective
-        metaconfigure.menuItemDirective = metaconfigure._fallbackMenuItemDirective
+        metaconfigure.menuItemDirective = (
+            metaconfigure._fallbackMenuItemDirective)
         try:
             with warnings.catch_warnings(record=True) as w:
                 result = self._call(menu='menu', title='title', for_=(1,))
             self.assertEqual(result, [])
             self.assertEqual(
-                'Page directive used with "menu" argument, while "zope.browsermenu" '
+                'Page directive used with "menu" argument,'
+                ' while "zope.browsermenu" '
                 'package is not installed. Doing nothing.',
                 str(w[0].message))
         finally:
             metaconfigure.menuItemDirective = menuItemDirective
+
 
 class TestSimple(unittest.TestCase):
 

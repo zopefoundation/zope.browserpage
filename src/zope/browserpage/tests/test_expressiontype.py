@@ -16,11 +16,13 @@
 import unittest
 from io import StringIO
 
-from zope.configuration.xmlconfig import xmlconfig, XMLConfig
+from zope.component.testing import PlacelessSetup
+from zope.configuration.xmlconfig import XMLConfig
+from zope.configuration.xmlconfig import xmlconfig
 from zope.pagetemplate.engine import Engine
+
 import zope.browserpage
 
-from zope.component.testing import PlacelessSetup
 
 template = u"""<configure
    xmlns='http://namespaces.zope.org/zope'
@@ -31,6 +33,7 @@ template = u"""<configure
 
 class Handler(object):
     pass
+
 
 class Test(PlacelessSetup, unittest.TestCase):
 
@@ -50,6 +53,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         ))
         self.assertIn("test", Engine.getTypes())
         self.assertIs(Handler, Engine.getTypes()['test'])
+
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

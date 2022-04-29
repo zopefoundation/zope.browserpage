@@ -18,21 +18,26 @@ import os
 from zope.component import queryMultiAdapter
 from zope.component.interface import provideInterface
 from zope.component.zcml import handler
-from zope.interface import implementer, classImplements, Interface
-from zope.publisher.interfaces import NotFound
-from zope.security.checker import CheckerPublic, Checker, defineChecker
 from zope.configuration.exceptions import ConfigurationError
+from zope.interface import Interface
+from zope.interface import classImplements
+from zope.interface import implementer
 from zope.pagetemplate.engine import Engine
-from zope.pagetemplate.engine import _Engine
 from zope.pagetemplate.engine import TrustedEngine
+from zope.pagetemplate.engine import _Engine
 from zope.pagetemplate.engine import _TrustedEngine
+from zope.publisher.browser import BrowserView
+from zope.publisher.interfaces import NotFound
+from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.publisher.browser import BrowserView
+from zope.security.checker import Checker
+from zope.security.checker import CheckerPublic
+from zope.security.checker import defineChecker
 
 from zope.browserpage.simpleviewclass import SimpleViewClass
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+
 
 def _fallbackMenuItemDirective(_context, *args, **kwargs):
     import warnings
@@ -43,9 +48,10 @@ def _fallbackMenuItemDirective(_context, *args, **kwargs):
         _context.info.file, _context.info.line)
     return []
 
+
 try:
     from zope.browsermenu.metaconfigure import menuItemDirective
-except ImportError: # pragma: no cover
+except ImportError:  # pragma: no cover
     menuItemDirective = _fallbackMenuItemDirective
 
 # There are three cases we want to suport:
@@ -99,6 +105,7 @@ except ImportError: # pragma: no cover
 
 # page
 
+
 def _norm_template(_context, template):
     template = os.path.abspath(str(_context.path(template)))
     if not os.path.isfile(template):
@@ -135,7 +142,7 @@ def page(_context, name, permission, for_=Interface,
             if not hasattr(class_, attribute):
                 raise ConfigurationError(
                     "The provided class doesn't have the specified attribute "
-                    )
+                )
         if template:
             # class and template
             new_class = SimpleViewClass(template, bases=(class_, ), name=name)
@@ -161,7 +168,9 @@ def page(_context, name, permission, for_=Interface,
                                required)
 
     _handle_for(_context, for_)
-    new_class._simple__whitelist = set(required) - set([attribute, 'browserDefault', '__call__', 'publishTraverse'])
+    new_class._simple__whitelist = (
+        set(required)
+        - set([attribute, 'browserDefault', '__call__', 'publishTraverse']))
 
     defineChecker(new_class, Checker(required))
 
@@ -206,6 +215,7 @@ class pages(object):
 
 # This is a different case. We actually build a class with attributes
 # for all of the given pages.
+
 
 class view(object):
 
@@ -312,7 +322,7 @@ class view(object):
 
         try:
             cname = str(name)
-        except Exception: # pragma: no cover
+        except Exception:  # pragma: no cover
             cname = "GeneratedClass"
 
         cdict['__name__'] = name
@@ -344,6 +354,7 @@ class view(object):
                   _context.info),
         )
 
+
 def _handle_menu(_context, menu, title, for_, name, permission,
                  layer=IDefaultBrowserLayer):
     if not menu and not title:
@@ -372,6 +383,7 @@ def _handle_permission(_context, permission):
 
     return permission
 
+
 def _handle_allowed_interface(_context, allowed_interface, permission,
                               required):
     # Allow access for all names defined by named interfaces
@@ -386,12 +398,14 @@ def _handle_allowed_interface(_context, allowed_interface, permission,
             for name in i:
                 required[name] = permission
 
+
 def _handle_allowed_attributes(_context, allowed_attributes, permission,
                                required):
     # Allow access for all named attributes
     if allowed_attributes:
         for name in allowed_attributes:
             required[name] = permission
+
 
 def _handle_for(_context, for_):
     if for_ is not None:
@@ -400,6 +414,7 @@ def _handle_for(_context, for_):
             callable=provideInterface,
             args=('', for_)
         )
+
 
 @implementer(IBrowserPublisher)
 class simple(BrowserView):
@@ -423,8 +438,8 @@ class simple(BrowserView):
         return meth(*a, **k)
 
     def browserDefault(self, request):
-        # If a class doesn't provide it's own browserDefault, then get the attribute
-        # given by the __page_attribute__.
+        # If a class doesn't provide it's own browserDefault, then get the
+        # attribute given by the __page_attribute__.
 
         attr = self.__page_attribute__
         if attr == 'browserDefault':
@@ -433,6 +448,7 @@ class simple(BrowserView):
 
         meth = getattr(self, attr)
         return (meth, "")
+
 
 def providesCallable(class_):
     if hasattr(class_, '__call__'):
@@ -449,6 +465,7 @@ def expressiontype(_context, name, handler):
         args=(name, handler)
     )
 
+
 def registerType(name, handler):
     Engine.registerType(name, handler)
     TrustedEngine.registerType(name, handler)
@@ -463,7 +480,7 @@ def clear():
 
 try:
     from zope.testing.cleanup import addCleanUp
-except ImportError: # pragma: no cover
+except ImportError:  # pragma: no cover
     pass
 else:
     addCleanUp(clear)
