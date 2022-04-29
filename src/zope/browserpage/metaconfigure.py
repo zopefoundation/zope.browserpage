@@ -168,9 +168,9 @@ def page(_context, name, permission, for_=Interface,
                                required)
 
     _handle_for(_context, for_)
-    new_class._simple__whitelist = set(
-        required) - set([
-            attribute, 'browserDefault', '__call__', 'publishTraverse'])
+    new_class._simple__whitelist = (
+        set(required)
+        - set([attribute, 'browserDefault', '__call__', 'publishTraverse']))
 
     defineChecker(new_class, Checker(required))
 
