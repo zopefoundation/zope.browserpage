@@ -7,6 +7,8 @@
 
 - Add support for Python 3.8, 3.9, 3.10.
 
+- Drop support for running the tests using ``python setup.py test``.
+  (`#11 <https://github.com/zopefoundation/zope.browserpage/issues/11>`_)
 
 4.4.0 (2019-06-18)
 ==================

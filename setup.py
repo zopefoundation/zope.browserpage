@@ -27,22 +27,6 @@ def read(*rnames):
 long_description = (read('README.rst') + '\n\n' + read('CHANGES.rst'))
 
 
-def alltests():
-    import sys
-    import unittest
-
-    # use the zope.testrunner machinery to find all the
-    # test suites we've put under ourselves
-    import zope.testrunner.find
-    import zope.testrunner.options
-    here = os.path.abspath(os.path.join(os.path.dirname(__file__), 'src'))
-    args = sys.argv[:]
-    defaults = ["--test-path", here]
-    options = zope.testrunner.options.get_options(args, defaults)
-    suites = list(zope.testrunner.find.find_suites(options))
-    return unittest.TestSuite(suites)
-
-
 TESTS_REQUIRE = [
     'zope.browsermenu',
     'zope.testing',
@@ -99,8 +83,6 @@ setup(
         ],
         'test': TESTS_REQUIRE,
     },
-    tests_require=TESTS_REQUIRE,
-    test_suite='__main__.alltests',
     include_package_data=True,
     zip_safe=False,
 )
