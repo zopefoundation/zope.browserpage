@@ -24,27 +24,27 @@ from zope.pagetemplate.engine import Engine
 import zope.browserpage
 
 
-template = u"""<configure
+template = """<configure
    xmlns='http://namespaces.zope.org/zope'
    xmlns:tales='http://namespaces.zope.org/tales'>
    %s
    </configure>"""
 
 
-class Handler(object):
+class Handler:
     pass
 
 
 class Test(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
-        super(Test, self).setUp()
+        super().setUp()
         XMLConfig('meta.zcml', zope.browserpage)()
 
     def testExpressionType(self):
         xmlconfig(StringIO(
             template %
-            u"""
+            """
             <tales:expressiontype
               name="test"
               handler="zope.browserpage.tests.test_expressiontype.Handler"

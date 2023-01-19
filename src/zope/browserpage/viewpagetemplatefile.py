@@ -26,13 +26,13 @@ class ViewPageTemplateFile(TrustedAppPT, PageTemplateFile):
 
     def __init__(self, filename, _prefix=None, content_type=None):
         _prefix = self.get_path_from_prefix(_prefix)
-        super(ViewPageTemplateFile, self).__init__(filename, _prefix)
+        super().__init__(filename, _prefix)
         if content_type is not None:
             self.content_type = content_type
 
     def pt_getContext(self, instance, request, **_kw):
         # instance is a View component
-        namespace = super(ViewPageTemplateFile, self).pt_getContext(**_kw)
+        namespace = super().pt_getContext(**_kw)
         namespace['request'] = request
         namespace['view'] = instance
         namespace['context'] = context = instance.context
@@ -58,7 +58,7 @@ class ViewPageTemplateFile(TrustedAppPT, PageTemplateFile):
         return BoundPageTemplate(self, instance)
 
 
-class ViewMapper(object):
+class ViewMapper:
     def __init__(self, ob, request):
         self.ob = ob
         self.request = request
@@ -67,7 +67,7 @@ class ViewMapper(object):
         return getMultiAdapter((self.ob, self.request), name=name)
 
 
-class BoundPageTemplate(object):
+class BoundPageTemplate:
     def __init__(self, pt, ob):
         object.__setattr__(self, '__func__', pt)
         object.__setattr__(self, '__self__', ob)

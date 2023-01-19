@@ -44,7 +44,7 @@ class simple(BrowserView):
         return self.index(*args, **kw)
 
 
-def SimpleViewClass(src, offering=None, used_for=None, bases=(), name=u''):
+def SimpleViewClass(src, offering=None, used_for=None, bases=(), name=''):
     if offering is None:
         offering = sys._getframe(1).f_globals
 

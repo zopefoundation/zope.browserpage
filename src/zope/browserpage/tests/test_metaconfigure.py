@@ -23,9 +23,9 @@ from zope.browserpage.metaconfigure import simple
 from zope.browserpage.metaconfigure import view
 
 
-class Context(object):
+class Context:
 
-    class info(object):
+    class info:
         file = __file__
         line = 1
 
@@ -40,10 +40,6 @@ class Context(object):
 
 
 class _AbstractHandlerTest(unittest.TestCase):
-
-    if not hasattr(unittest.TestCase, 'assertRaisesRegex'):  # pragma: no cover
-        # PY2:
-        assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
 
     def setUp(self):
         self.context = Context()
@@ -82,7 +78,7 @@ class TestPage(_AbstractHandlerTest):
             class_=type(self), attribute="does not exist")
 
     def test_class_with_browser_default(self):
-        class BrowserDefault(object):
+        class BrowserDefault:
             def browserDefault(self):
                 raise AssertionError("Not called")
         context = self._call(
@@ -95,7 +91,7 @@ class TestPage(_AbstractHandlerTest):
                          BrowserDefault.browserDefault)
 
     def test_class_with_allowed_attributes(self):
-        class BrowserDefault(object):
+        class BrowserDefault:
             def foo(self):
                 raise AssertionError("foo called")
 
@@ -112,7 +108,7 @@ class TestPage(_AbstractHandlerTest):
         self.assertEqual(new_class._simple__whitelist, {"foo"})
 
     def test_class_with_allowed_interface(self):
-        class BrowserDefault(object):
+        class BrowserDefault:
             def foo(self):
                 raise AssertionError("foo called")
 
@@ -137,7 +133,7 @@ class TestPage(_AbstractHandlerTest):
 
         from zope import interface
 
-        class Class(object):
+        class Class:
             # How does this arise in the wild?
             # @implementer(IThing) doesn't do it.
             __implements__ = None
@@ -174,7 +170,7 @@ class TestView(_AbstractHandlerTest):
         self._check_raises('Undefined attribute')
 
     def test_class_without_publish_traverse_name(self):
-        class C(object):
+        class C:
             attr = 'the attr'
 
         v = view(self.context, None, class_=C)
@@ -194,7 +190,7 @@ class TestView(_AbstractHandlerTest):
             instance.publishTraverse(None, 'something else')
 
     def test_class_with_publish_traverse_name(self):
-        class C(object):
+        class C:
             attr = 'the attr'
 
             def publishTraverse(self, *args):
@@ -214,7 +210,7 @@ class TestView(_AbstractHandlerTest):
                          instance.publishTraverse(None, 'page_name'))
 
     def test_class_with_publish_traverse_other_name(self):
-        class C(object):
+        class C:
             attr = 'the attr'
 
             def publishTraverse(self, *args):
