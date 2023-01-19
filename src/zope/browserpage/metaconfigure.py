@@ -170,7 +170,7 @@ def page(_context, name, permission, for_=Interface,
     _handle_for(_context, for_)
     new_class._simple__whitelist = (
         set(required)
-        - set([attribute, 'browserDefault', '__call__', 'publishTraverse']))
+        - {attribute, 'browserDefault', '__call__', 'publishTraverse'})
 
     defineChecker(new_class, Checker(required))
 
@@ -187,7 +187,7 @@ def page(_context, name, permission, for_=Interface,
 # Note that a class might want to access one of the defined
 # templates. If it does though, it should use getMultiAdapter.
 
-class pages(object):
+class pages:
 
     def __init__(self, _context, permission, for_=Interface,
                  layer=IDefaultBrowserLayer, class_=None,
@@ -217,7 +217,7 @@ class pages(object):
 # for all of the given pages.
 
 
-class view(object):
+class view:
 
     default = None
 

@@ -46,7 +46,7 @@ from zope import component
 
 tests_path = os.path.dirname(__file__)
 
-template = u"""<configure
+template = """<configure
    xmlns='http://namespaces.zope.org/zope'
    xmlns:browser='http://namespaces.zope.org/browser'
    i18n_domain='zope'>
@@ -54,7 +54,7 @@ template = u"""<configure
    </configure>"""
 
 
-class templateclass(object):
+class templateclass:
     def data(self):
         return 42
 
@@ -73,7 +73,7 @@ class IC(Interface):
 
 
 @implementer(IV)
-class V1(object):
+class V1:
 
     def __init__(self, context, request):
         self.context = context
@@ -92,7 +92,7 @@ class VZMI(V1):
 
 
 @implementer(IV)
-class R1(object):
+class R1:
     pass
 
 
@@ -100,7 +100,7 @@ class RZMI(R1):
     pass
 
 
-class V2(V1, object):
+class V2(V1):
 
     def action(self):
         return self.action2()
@@ -109,20 +109,20 @@ class V2(V1, object):
         return "done"
 
 
-class VT(V1, object):
+class VT(V1):
     def publishTraverse(self, request, name):
         raise AssertionError("Not called")
 
 
 @implementer(IC)
-class Ob(object):
+class Ob:
     pass
 
 
 ob = Ob()
 
 
-class NCV(object):
+class NCV:
     "non callable view"
 
     def __init__(self, context, request):
@@ -161,7 +161,7 @@ directlyProvides(ITestMenu, IMenuItemType)
 class Test(cleanup.CleanUp, unittest.TestCase):
 
     def setUp(self):
-        super(Test, self).setUp()
+        super().setUp()
         XMLConfig('meta.zcml', zope.browserpage)()
         XMLConfig('meta.zcml', zope.browsermenu)()
         component.provideAdapter(DefaultTraversable, (None,), ITraversable, )
@@ -312,7 +312,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:page name="test"
                 class="zope.browserpage.tests.test_page.VZMI"
                 for="zope.browserpage.tests.test_page.IC"
@@ -338,7 +338,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
     def testInterfaceProtectedPage(self):
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:page name="test"
                 class="zope.browserpage.tests.test_page.V1"
                 attribute="index"
@@ -357,7 +357,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
     def testAttributeProtectedPage(self):
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:page name="test"
                 class="zope.browserpage.tests.test_page.V2"
                 for="zope.browserpage.tests.test_page.IC"
@@ -377,7 +377,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
     def testAttributeProtectedView(self):
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:view name="test"
                 class="zope.browserpage.tests.test_page.V2"
                 for="zope.browserpage.tests.test_page.IC"
@@ -399,7 +399,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
     def testInterfaceAndAttributeProtectedPage(self):
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:page name="test"
                 class="zope.browserpage.tests.test_page.V1"
                 for="zope.browserpage.tests.test_page.IC"
@@ -418,7 +418,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
     def testDuplicatedInterfaceAndAttributeProtectedPage(self):
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:page name="test"
                 class="zope.browserpage.tests.test_page.V1"
                 for="zope.browserpage.tests.test_page.IC"
@@ -437,7 +437,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
     def test_class_w_implements(self):
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:page
                 name="test"
                 class="
@@ -459,7 +459,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             xmlconfig,
             StringIO(
                 template %
-                u'''
+                '''
             <browser:page name="test"
                 class="zope.browserpage.tests.test_page.V1"
                 for="zope.browserpage.tests.test_page.IC"
@@ -477,7 +477,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:pages
                 class="zope.browserpage.tests.test_page.V1"
                 for="zope.browserpage.tests.test_page.IC"
@@ -506,7 +506,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:view
                 name="test"
                 class="zope.browserpage.tests.test_page.V1"
@@ -523,7 +523,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(
-            self.request)[1], (u'index.html', ))
+            self.request)[1], ('index.html', ))
 
         v = view.publishTraverse(self.request, 'index.html')
         v = removeSecurityProxy(v)
@@ -539,7 +539,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:view
                 name="test"
                 class="zope.browserpage.tests.test_page.CV"
@@ -560,7 +560,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:view
                 name="test"
                 class="zope.browserpage.tests.test_page.NCV"
@@ -586,7 +586,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:view
                 name="test"
                 class="zope.browserpage.tests.test_page.V1"
@@ -604,7 +604,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(
-            self.request)[1], (u'index.html', ))
+            self.request)[1], ('index.html', ))
 
         v = view.publishTraverse(self.request, 'index.html')
         v = removeSecurityProxy(v)
@@ -621,11 +621,11 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         self.assertEqual(
             component.queryMultiAdapter((ob, self.request), name='test'),
             None)
-        test3 = os.path.join(tests_path, u'testfiles', u'test3.pt')
+        test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:view
                 name="test"
                 class="zope.browserpage.tests.test_page.V1"
@@ -644,7 +644,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         view = component.getMultiAdapter((ob, self.request), name='test')
         view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(
-            self.request)[1], (u'test.html', ))
+            self.request)[1], ('test.html', ))
 
         v = view.publishTraverse(self.request, 'index.html')
         v = removeSecurityProxy(v)
@@ -662,7 +662,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:view
                 name="test"
                 class="zope.browserpage.tests.test_page.V1"
@@ -690,7 +690,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         """
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:view
                 name="test"
                 class="zope.browserpage.tests.test_page.VT"
@@ -718,7 +718,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <include package="zope.security" file="meta.zcml" />
 
             <permission id="zope.TestPermission" title="Test permission" />
@@ -750,7 +750,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <include package="zope.security" file="meta.zcml" />
 
             <permission id="zope.TestPermission" title="Test permission" />
@@ -770,7 +770,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         view = component.getMultiAdapter((ob, self.request), name='test')
         self.assertEqual(view.browserDefault(
-            self.request)[1], (u'index.html', ))
+            self.request)[1], ('index.html', ))
 
         v = view.publishTraverse(self.request, 'index.html')
         self.assertEqual(v(), 'V1 here')
@@ -782,7 +782,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:pages
                 class="zope.browserpage.tests.test_page.V1"
                 for="*"
@@ -817,7 +817,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:page
                 name="index.html"
                 template="%s"
@@ -837,7 +837,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:menu
                 id="test_menu"
                 title="Test menu"
@@ -872,7 +872,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:page
                 name="index.html"
                 template="%s"
@@ -896,7 +896,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <include package="zope.security" file="meta.zcml" />
 
             <permission id="zope.TestPermission" title="Test permission" />
@@ -911,7 +911,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:page
                 name="index.html"
                 template="%s"
@@ -936,7 +936,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             xmlconfig,
             StringIO(
                 template %
-                u'''
+                '''
             <browser:page
                 template="%s"
                 for="zope.browserpage.tests.test_page.IC"
@@ -945,13 +945,13 @@ class Test(cleanup.CleanUp, unittest.TestCase):
             ))
 
     def testtemplateAndPage(self):
-        path = os.path.join(tests_path, u'testfiles', u'test.pt')
+        path = os.path.join(tests_path, 'testfiles', 'test.pt')
         self.assertRaises(
             ConfigurationError,
             xmlconfig,
             StringIO(
                 template %
-                u'''
+                '''
             <browser:view
                 name="index.html"
                 template="%s"
@@ -970,7 +970,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:view
                 name="test"
                 class="zope.browserpage.tests.test_page.V1"
@@ -985,7 +985,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:view
                 name="test"
                 class="zope.browserpage.tests.test_page.V1"
@@ -1006,7 +1006,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:view
                 class="zope.browserpage.tests.test_page.V1"
                 for="zope.browserpage.tests.test_page.IC"
@@ -1020,7 +1020,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         xmlconfig(StringIO(
             template %
-            u'''
+            '''
             <browser:view
                 class="zope.browserpage.tests.test_page.V1"
                 for="zope.browserpage.tests.test_page.IC"

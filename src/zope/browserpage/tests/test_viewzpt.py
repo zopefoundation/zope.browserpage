@@ -29,23 +29,23 @@ class I1(Interface):
 
 
 @implementer(I1)
-class C1(object):
+class C1:
     pass
 
 
-class InstanceWithContext(object):
+class InstanceWithContext:
     def __init__(self, context):
         self.context = context
 
 
-class InstanceWithoutContext(object):
+class InstanceWithoutContext:
     pass
 
 
 class TestViewZPT(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
-        super(TestViewZPT, self).setUp()
+        super().setUp()
         self.t = ViewPageTemplateFile('test.pt')
         self.context = C1()
 
@@ -76,7 +76,7 @@ class TestViewZPT(PlacelessSetup, unittest.TestCase):
             ViewMaker, (I1, IRequest), Interface, the_view_name, event=False)
 
         @implementer(IRequest)
-        class MyRequest(object):
+        class MyRequest:
             pass
 
         request = MyRequest()

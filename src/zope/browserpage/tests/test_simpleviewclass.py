@@ -68,7 +68,7 @@ class Test_SimpleViewClass(unittest.TestCase):
     def test_w_base_classes(self):
         from zope.publisher.browser import TestRequest
 
-        class BaseClass(object):
+        class BaseClass:
             pass
 
         klass = self._makeKlass('testsimpleviewclass.pt', bases=(BaseClass, ))
@@ -179,7 +179,7 @@ class DummyTemplate:
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(Test_SimpleTestView),
-        unittest.makeSuite(Test_SimpleViewClass),
-        unittest.makeSuite(Test_simple),
+        unittest.defaultTestLoader.loadTestsFromTestCase(Test_SimpleTestView),
+        unittest.defaultTestLoader.loadTestsFromTestCase(Test_SimpleViewClass),
+        unittest.defaultTestLoader.loadTestsFromTestCase(Test_simple),
     ))

@@ -44,13 +44,13 @@ class TestNamedTemplateImplementation(unittest.TestCase):
 class TestNamedTemplate(unittest.TestCase):
 
     def test_no_instance(self):
-        class X(object):
+        class X:
             nt = namedtemplate.NamedTemplate('name')
 
         self.assertIsInstance(X.nt, namedtemplate.NamedTemplate)
 
     def test_call_no_adapter(self):
-        class X(object):
+        class X:
             nt = namedtemplate.NamedTemplate('name')
 
         with self.assertRaises(LookupError):

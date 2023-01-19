@@ -25,7 +25,7 @@ class INamedTemplate(interface.Interface):
     """
 
 
-class NamedTemplateImplementation(object):
+class NamedTemplateImplementation:
 
     def __init__(self, descriptor, view_type=None):
         try:
@@ -44,7 +44,7 @@ class NamedTemplateImplementation(object):
         return self.descriptor.__get__(instance, instance.__class__)
 
 
-class implementation(object):
+class implementation:
 
     def __init__(self, view_type=None):
         self.view_type = view_type
@@ -53,7 +53,7 @@ class implementation(object):
         return NamedTemplateImplementation(descriptor, self.view_type)
 
 
-class NamedTemplate(object):
+class NamedTemplate:
 
     def __init__(self, name):
         self.__name__ = name
@@ -68,7 +68,7 @@ class NamedTemplate(object):
 
 
 @interface.implementer(zope.traversing.interfaces.IPathAdapter)
-class NamedTemplatePathAdapter(object):
+class NamedTemplatePathAdapter:
 
     def __init__(self, context):
         self.context = context
