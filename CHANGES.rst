@@ -5,14 +5,13 @@
 5.0 (unreleased)
 ================
 
-- Add support for Python 3.11.
-
 - Drop support for Python 2.7, 3.5, 3.6.
 
-- Add support for Python 3.8, 3.9, 3.10.
+- Add support for Python 3.8, 3.9, 3.10, 3.11.
 
 - Drop support for running the tests using ``python setup.py test``.
   (`#11 <https://github.com/zopefoundation/zope.browserpage/issues/11>`_)
+
 
 4.4.0 (2019-06-18)
 ==================
