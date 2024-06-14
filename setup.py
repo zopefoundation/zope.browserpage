@@ -35,7 +35,7 @@ TESTS_REQUIRE = [
 
 setup(
     name='zope.browserpage',
-    version='5.1.dev0',
+    version='6.0.dev0',
     url='https://github.com/zopefoundation/zope.browserpage',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.org',
@@ -45,11 +45,11 @@ setup(
         'License :: OSI Approved :: Zope Public License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Operating System :: OS Independent',
@@ -62,7 +62,7 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
     namespace_packages=['zope'],
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     install_requires=[
         'setuptools',
         'zope.tal >= 4.2.0',

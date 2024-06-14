@@ -43,15 +43,14 @@ def _fallbackMenuItemDirective(_context, *args, **kwargs):
     import warnings
     warnings.warn_explicit(
         'Page directive used with "menu" argument, while "zope.browsermenu" '
-        'package is not installed. Doing nothing.',
-        UserWarning,
+        'package is not installed. Doing nothing.', UserWarning,
         _context.info.file, _context.info.line)
     return []
 
 
 try:
     from zope.browsermenu.metaconfigure import menuItemDirective
-except ImportError:  # pragma: no cover
+except ModuleNotFoundError:  # pragma: no cover
     menuItemDirective = _fallbackMenuItemDirective
 
 # There are three cases we want to suport:
@@ -113,10 +112,18 @@ def _norm_template(_context, template):
     return template
 
 
-def page(_context, name, permission, for_=Interface,
-         layer=IDefaultBrowserLayer, template=None, class_=None,
-         allowed_interface=None, allowed_attributes=None,
-         attribute='__call__', menu=None, title=None):
+def page(_context,
+         name,
+         permission,
+         for_=Interface,
+         layer=IDefaultBrowserLayer,
+         template=None,
+         class_=None,
+         allowed_interface=None,
+         allowed_attributes=None,
+         attribute='__call__',
+         menu=None,
+         title=None):
     _handle_menu(_context, menu, title, [for_], name, permission, layer)
     required = {}
 
@@ -141,8 +148,7 @@ def page(_context, name, permission, for_=Interface,
         if attribute != '__call__':
             if not hasattr(class_, attribute):
                 raise ConfigurationError(
-                    "The provided class doesn't have the specified attribute "
-                )
+                    "The provided class doesn't have the specified attribute ")
         if template:
             # class and template
             new_class = SimpleViewClass(template, bases=(class_, ), name=name)
@@ -150,7 +156,10 @@ def page(_context, name, permission, for_=Interface,
             cdict = {}
             cdict['__name__'] = name
             cdict['__page_attribute__'] = attribute
-            new_class = type(class_.__name__, (class_, simple,), cdict)
+            new_class = type(class_.__name__, (
+                class_,
+                simple,
+            ), cdict)
 
         if hasattr(class_, '__implements__'):
             classImplements(new_class, IBrowserPublisher)
@@ -169,16 +178,16 @@ def page(_context, name, permission, for_=Interface,
 
     _handle_for(_context, for_)
     new_class._simple__whitelist = (
-        set(required)
-        - {attribute, 'browserDefault', '__call__', 'publishTraverse'})
+        set(required) -
+        {attribute, 'browserDefault', '__call__', 'publishTraverse'})
 
     defineChecker(new_class, Checker(required))
 
     _context.action(
         discriminator=('view', (for_, layer), name, IBrowserRequest),
         callable=handler,
-        args=('registerAdapter',
-              new_class, (for_, layer), Interface, name, _context.info),
+        args=('registerAdapter', new_class, (for_, layer), Interface, name,
+              _context.info),
     )
 
 
@@ -187,29 +196,44 @@ def page(_context, name, permission, for_=Interface,
 # Note that a class might want to access one of the defined
 # templates. If it does though, it should use getMultiAdapter.
 
+
 class pages:
 
-    def __init__(self, _context, permission, for_=Interface,
-                 layer=IDefaultBrowserLayer, class_=None,
-                 allowed_interface=None, allowed_attributes=None):
+    def __init__(self,
+                 _context,
+                 permission,
+                 for_=Interface,
+                 layer=IDefaultBrowserLayer,
+                 class_=None,
+                 allowed_interface=None,
+                 allowed_attributes=None):
         self.opts = dict(
-            for_=for_, permission=permission,
-            layer=layer, class_=class_,
+            for_=for_,
+            permission=permission,
+            layer=layer,
+            class_=class_,
             allowed_interface=allowed_interface,
             allowed_attributes=allowed_attributes,
         )
 
-    def page(self, _context, name, attribute='__call__', template=None,
-             menu=None, title=None):
+    def page(self,
+             _context,
+             name,
+             attribute='__call__',
+             template=None,
+             menu=None,
+             title=None):
         return page(_context,
                     name=name,
                     attribute=attribute,
                     template=template,
-                    menu=menu, title=title,
+                    menu=menu,
+                    title=title,
                     **(self.opts))
 
     def __call__(self):
         return ()
+
 
 # view (named view with pages)
 
@@ -221,10 +245,18 @@ class view:
 
     default = None
 
-    def __init__(self, _context, permission, for_=Interface,
-                 name='', layer=IDefaultBrowserLayer, class_=None,
-                 allowed_interface=None, allowed_attributes=None,
-                 menu=None, title=None, provides=Interface):
+    def __init__(self,
+                 _context,
+                 permission,
+                 for_=Interface,
+                 name='',
+                 layer=IDefaultBrowserLayer,
+                 class_=None,
+                 allowed_interface=None,
+                 allowed_attributes=None,
+                 menu=None,
+                 title=None,
+                 provides=Interface):
 
         _handle_menu(_context, menu, title, [for_], name, permission, layer)
 
@@ -253,8 +285,8 @@ class view:
         return ()
 
     def __call__(self):
-        (_context, name, (for_, layer), permission, class_,
-         allowed_interface, allowed_attributes) = self.args
+        (_context, name, (for_, layer), permission, class_, allowed_interface,
+         allowed_attributes) = self.args
 
         required = {}
 
@@ -269,8 +301,7 @@ class view:
                     cdict[attribute] = cdict[pname]
             else:
                 if not hasattr(class_, attribute):
-                    raise ConfigurationError("Undefined attribute",
-                                             attribute)
+                    raise ConfigurationError("Undefined attribute", attribute)
 
             attribute = attribute or pname
             required[pname] = permission
@@ -280,8 +311,11 @@ class view:
         # This should go away, but noone seems to remember what to do. :-(
         if hasattr(class_, 'publishTraverse'):
 
-            def publishTraverse(self, request, name,
-                                pages=pages, getattr=getattr):
+            def publishTraverse(self,
+                                request,
+                                name,
+                                pages=pages,
+                                getattr=getattr):
 
                 if name in pages:
                     return getattr(self, pages[name])
@@ -293,8 +327,12 @@ class view:
                 return m(request, name)
 
         else:
-            def publishTraverse(self, request, name,
-                                pages=pages, getattr=getattr):
+
+            def publishTraverse(self,
+                                request,
+                                name,
+                                pages=pages,
+                                getattr=getattr):
 
                 if name in pages:
                     return getattr(self, pages[name])
@@ -310,15 +348,12 @@ class view:
             if self.default or self.pages:
                 _default = self.default or self.pages[0][0]
                 cdict['browserDefault'] = (
-                    lambda self, request, default=_default:
-                    (self, (default, ))
-                )
+                    lambda self, request, default=_default: (self,
+                                                             (default, )))
             elif providesCallable(class_):
-                cdict['browserDefault'] = (
-                    lambda self, request: (self, ())
-                )
+                cdict['browserDefault'] = (lambda self, request: (self, ()))
 
-        bases = (simple,) if class_ is None else (class_, simple)
+        bases = (simple, ) if class_ is None else (class_, simple)
 
         try:
             cname = str(name)
@@ -340,22 +375,24 @@ class view:
         defineChecker(newclass, Checker(required))
 
         if self.provides is not None:
-            _context.action(
-                discriminator=None,
-                callable=provideInterface,
-                args=('', self.provides)
-            )
+            _context.action(discriminator=None,
+                            callable=provideInterface,
+                            args=('', self.provides))
 
         _context.action(
             discriminator=('view', (for_, layer), name, self.provides),
             callable=handler,
-            args=('registerAdapter',
-                  newclass, (for_, layer), self.provides, name,
-                  _context.info),
+            args=('registerAdapter', newclass, (for_, layer), self.provides,
+                  name, _context.info),
         )
 
 
-def _handle_menu(_context, menu, title, for_, name, permission,
+def _handle_menu(_context,
+                 menu,
+                 title,
+                 for_,
+                 name,
+                 permission,
                  layer=IDefaultBrowserLayer):
     if not menu and not title:
         # Neither of them
@@ -372,9 +409,13 @@ def _handle_menu(_context, menu, title, for_, name, permission,
             "Menus can be specified only for single-view, not for "
             "multi-views.")
 
-    return menuItemDirective(
-        _context, menu, for_[0], '@@' + name, title,
-        permission=permission, layer=layer)
+    return menuItemDirective(_context,
+                             menu,
+                             for_[0],
+                             '@@' + name,
+                             title,
+                             permission=permission,
+                             layer=layer)
 
 
 def _handle_permission(_context, permission):
@@ -389,11 +430,9 @@ def _handle_allowed_interface(_context, allowed_interface, permission,
     # Allow access for all names defined by named interfaces
     if allowed_interface:
         for i in allowed_interface:
-            _context.action(
-                discriminator=None,
-                callable=provideInterface,
-                args=(None, i)
-            )
+            _context.action(discriminator=None,
+                            callable=provideInterface,
+                            args=(None, i))
 
             for name in i:
                 required[name] = permission
@@ -409,11 +448,9 @@ def _handle_allowed_attributes(_context, allowed_attributes, permission,
 
 def _handle_for(_context, for_):
     if for_ is not None:
-        _context.action(
-            discriminator=None,
-            callable=provideInterface,
-            args=('', for_)
-        )
+        _context.action(discriminator=None,
+                        callable=provideInterface,
+                        args=('', for_))
 
 
 @implementer(IBrowserPublisher)
@@ -459,11 +496,9 @@ def providesCallable(class_):
 
 
 def expressiontype(_context, name, handler):
-    _context.action(
-        discriminator=("tales:expressiontype", name),
-        callable=registerType,
-        args=(name, handler)
-    )
+    _context.action(discriminator=("tales:expressiontype", name),
+                    callable=registerType,
+                    args=(name, handler))
 
 
 def registerType(name, handler):
@@ -480,7 +515,7 @@ def clear():
 
 try:
     from zope.testing.cleanup import addCleanUp
-except ImportError:  # pragma: no cover
+except ModuleNotFoundError:  # pragma: no cover
     pass
 else:
     addCleanUp(clear)
