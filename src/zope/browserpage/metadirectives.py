@@ -26,7 +26,7 @@ from zope.security.zcml import Permission
 
 try:
     from zope.browsermenu.field import MenuField
-except ImportError:  # pragma: no cover
+except ModuleNotFoundError:  # pragma: no cover
     # avoid hard dependency on zope.browsermenu
     MenuField = TextLine
 
@@ -40,23 +40,19 @@ class IPagesDirective(IBasicViewInformation):
     'allowed_attributes', and 'allowed_interface' attributes.
     """
 
-    for_ = GlobalObject(
-        title="The interface or class this view is for.",
-        required=False
-    )
+    for_ = GlobalObject(title="The interface or class this view is for.",
+                        required=False)
 
     layer = GlobalObject(
         title="The request interface or class this view is for.",
         description="Defaults to "
-                    "zope.publisher.interfaces.browser.IDefaultBrowserLayer.",
-        required=False
-    )
+        "zope.publisher.interfaces.browser.IDefaultBrowserLayer.",
+        required=False)
 
     permission = Permission(
         title="Permission",
         description="The permission needed to use the view.",
-        required=True
-    )
+        required=True)
 
 
 class IViewDirective(IPagesDirective):
@@ -67,10 +63,8 @@ class IViewDirective(IPagesDirective):
     traversing to the view name and then traversing to the page name.
     """
 
-    for_ = GlobalInterface(
-        title="The interface this view is for.",
-        required=False
-    )
+    for_ = GlobalInterface(title="The interface this view is for.",
+                           required=False)
 
     name = TextLine(
         title="The name of the view.",
@@ -79,9 +73,8 @@ class IViewDirective(IPagesDirective):
         default='',
     )
 
-    menu = MenuField(
-        title="The browser menu to include the page (view) in.",
-        description="""
+    menu = MenuField(title="The browser menu to include the page (view) in.",
+                     description="""
           Many views are included in menus. It's convenient to name
           the menu in the page directive, rather than having to give a
           separate menuItem directive.  'zmi_views' is the menu most often
@@ -89,19 +82,16 @@ class IViewDirective(IPagesDirective):
 
           This attribute will only work if zope.browsermenu is installed.
           """,
-        required=False
-    )
+                     required=False)
 
-    title = MessageID(
-        title="The browser menu label for the page (view)",
-        description="""
+    title = MessageID(title="The browser menu label for the page (view)",
+                      description="""
           This attribute must be supplied if a menu attribute is
           supplied.
 
           This attribute will only work if zope.browsermenu is installed.
           """,
-        required=False
-    )
+                      required=False)
 
     provides = GlobalInterface(
         title="The interface this view provides.",
@@ -118,33 +108,28 @@ class IViewPageSubdirective(Interface):
     Subdirective to IViewDirective.
     """
 
-    name = TextLine(
-        title="The name of the page (view)",
-        description="""
+    name = TextLine(title="The name of the page (view)",
+                    description="""
         The name shows up in URLs/paths. For example 'foo' or
         'foo.html'. This attribute is required unless you use the
         subdirective 'page' to create sub views. If you do not have
         sub pages, it is common to use an extension for the view name
         such as '.html'. If you do have sub pages and you want to
         provide a view name, you shouldn't use extensions.""",
-        required=True
-    )
+                    required=True)
 
     attribute = PythonIdentifier(
         title="The name of the view attribute implementing the page.",
         description="""
         This refers to the attribute (method) on the view that is
         implementing a specific sub page.""",
-        required=False
-    )
+        required=False)
 
-    template = Path(
-        title="The name of a template that implements the page.",
-        description="""
+    template = Path(title="The name of a template that implements the page.",
+                    description="""
         Refers to a file containing a page template (should end in
         extension '.pt' or '.html').""",
-        required=False
-    )
+                    required=False)
 
 
 class IViewDefaultPageSubdirective(Interface):
@@ -152,15 +137,13 @@ class IViewDefaultPageSubdirective(Interface):
     Subdirective to IViewDirective.
     """
 
-    name = TextLine(
-        title="The name of the page that is the default.",
-        description="""
+    name = TextLine(title="The name of the page that is the default.",
+                    description="""
         The named page will be used as the default if no name is
         specified explicitly in the path. If no defaultPage directive
         is supplied, the default page will be the first page
         listed.""",
-        required=True
-    )
+                    required=True)
 
 
 class IPagesPageSubdirective(IViewPageSubdirective):
@@ -168,28 +151,24 @@ class IPagesPageSubdirective(IViewPageSubdirective):
     Subdirective to IPagesDirective
     """
 
-    menu = MenuField(
-        title="The browser menu to include the page (view) in.",
-        description="""
+    menu = MenuField(title="The browser menu to include the page (view) in.",
+                     description="""
         Many views are included in menus. It's convenient to name the
         menu in the page directive, rather than having to give a
         separate menuItem directive.
 
         This attribute will only work if zope.browsermenu is installed.
         """,
-        required=False
-    )
+                     required=False)
 
-    title = MessageID(
-        title="The browser menu label for the page (view)",
-        description="""
+    title = MessageID(title="The browser menu label for the page (view)",
+                      description="""
         This attribute must be supplied if a menu attribute is
         supplied.
 
         This attribute will only work if zope.browsermenu is installed.
         """,
-        required=False
-    )
+                      required=False)
 
 
 class IPageDirective(IPagesDirective, IPagesPageSubdirective):
@@ -209,12 +188,9 @@ class IExpressionTypeDirective(Interface):
         title="Name",
         description="""Name of the expression. This will also be used
         as the prefix in actual TALES expressions.""",
-        required=True
-    )
+        required=True)
 
-    handler = GlobalObject(
-        title="Handler",
-        description="""Handler is class that implements
+    handler = GlobalObject(title="Handler",
+                           description="""Handler is class that implements
         zope.tales.interfaces.ITALESExpression.""",
-        required=True
-    )
+                           required=True)
