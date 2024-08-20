@@ -24,7 +24,7 @@ jobs:
         python-version: 3.x
     - uses: pre-commit/action@v3.0.1
       with:
-        extra_args: --all-files --show-diff-on-failure
+        extra_args: --all-files
       env:
         PRE_COMMIT_COLOR: always
     - uses: pre-commit-ci/lite-action@v1.0.2
