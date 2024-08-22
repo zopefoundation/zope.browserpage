@@ -86,7 +86,7 @@ def test_suite():
         doctest.DocFileSuite(
             filename,
             setUp=pageSetUp, tearDown=zope.component.testing.tearDown,
-            globs={'__file__': os.path.abspath(
+            globs={'__file__':  os.path.abspath(
                 os.path.join(os.path.dirname(__file__), filename))}
         )
     ])
