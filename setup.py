@@ -74,7 +74,7 @@ setup(
         'zope.schema',
         'zope.security',
         'zope.traversing',
-        ],
+    ],
     extras_require={
         'menu': [
             'zope.browsermenu',
