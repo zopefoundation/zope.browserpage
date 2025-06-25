@@ -62,7 +62,7 @@ class Test_SimpleViewClass(unittest.TestCase):
     def test___getitem___(self):
         klass = self._makeKlass('testsimpleviewclass.pt', name='test.html')
         view = klass(None, None)
-        self.assertTrue(view['test'] is not None)
+        self.assertIsNotNone(view['test'])
         self.assertRaises(KeyError, view.__getitem__, 'foo')
 
     def test_w_base_classes(self):
@@ -120,41 +120,41 @@ class Test_simple(unittest.TestCase):
         request = DummyRequest()
         view = self._makeOne(request=request)
         index = view.index = DummyTemplate()
-        self.assertTrue(view.publishTraverse(request, 'index.html') is index)
+        self.assertIs(view.publishTraverse(request, 'index.html'), index)
 
     def test___getitem___uses_index_macros(self):
         view = self._makeOne()
         view.index = index = DummyTemplate()
         index.macros = {}
         index.macros['aaa'] = aaa = object()
-        self.assertTrue(view['aaa'] is aaa)
+        self.assertIs(view['aaa'], aaa)
 
     def test___call___no_args_no_kw(self):
         view = self._makeOne()
         view.index = index = DummyTemplate()
         result = view()
-        self.assertTrue(result is index)
+        self.assertIs(result, index)
         self.assertEqual(index._called_with, ((), {}))
 
     def test___call___w_args_no_kw(self):
         view = self._makeOne()
         view.index = index = DummyTemplate()
         result = view('abc')
-        self.assertTrue(result is index)
+        self.assertIs(result, index)
         self.assertEqual(index._called_with, (('abc',), {}))
 
     def test___call___no_args_w_kw(self):
         view = self._makeOne()
         view.index = index = DummyTemplate()
         result = view(foo='bar')
-        self.assertTrue(result is index)
+        self.assertIs(result, index)
         self.assertEqual(index._called_with, ((), {'foo': 'bar'}))
 
     def test___call___w_args_w_kw(self):
         view = self._makeOne()
         view.index = index = DummyTemplate()
         result = view('abc', foo='bar')
-        self.assertTrue(result is index)
+        self.assertIs(result, index)
         self.assertEqual(index._called_with, (('abc',), {'foo': 'bar'}))
 
 

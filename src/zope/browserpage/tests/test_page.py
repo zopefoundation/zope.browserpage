@@ -997,7 +997,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
         ))
 
         v = component.queryMultiAdapter((ob, request), IV, name='test')
-        self.assertTrue(isinstance(v, V1))
+        self.assertIsInstance(v, V1)
 
     def testUnnamedViewThatProvidesAnInterface(self):
         request = TestRequest()
@@ -1032,7 +1032,7 @@ class Test(cleanup.CleanUp, unittest.TestCase):
 
         v = component.queryMultiAdapter((ob, request), IV)
 
-        self.assertTrue(isinstance(v, V1))
+        self.assertIsInstance(v, V1)
 
 
 def test_suite():

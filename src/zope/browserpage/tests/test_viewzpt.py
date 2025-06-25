@@ -54,8 +54,8 @@ class TestViewZPT(PlacelessSetup, unittest.TestCase):
         request = None
 
         namespace = self.t.pt_getContext(InstanceWithContext(context), request)
-        self.assertTrue(namespace['context'] is context)
-        self.assertTrue('views' in namespace)
+        self.assertIs(namespace['context'], context)
+        self.assertIn('views', namespace)
 
     def testNamespaceHereNotAvailable(self):
         request = None
@@ -84,21 +84,21 @@ class TestViewZPT(PlacelessSetup, unittest.TestCase):
         namespace = self.t.pt_getContext(InstanceWithContext(self.context),
                                          request)
         views = namespace['views']
-        self.assertTrue(the_view is views[the_view_name])
+        self.assertIs(the_view, views[the_view_name])
 
     def test_debug_flags(self):
         from zope.publisher.browser import TestRequest
         self.request = TestRequest()
         self.request.debug.sourceAnnotations = False
-        self.assertFalse('test.pt' in self.t(self))
+        self.assertNotIn('test.pt', self.t(self))
         self.request.debug.sourceAnnotations = True
-        self.assertTrue('test.pt' in self.t(self))
+        self.assertIn('test.pt', self.t(self))
 
         t = ViewPageTemplateFile('testsimpleviewclass.pt')
         self.request.debug.showTAL = False
-        self.assertFalse('metal:' in t(self))
+        self.assertNotIn('metal:', t(self))
         self.request.debug.showTAL = True
-        self.assertTrue('metal:' in t(self))
+        self.assertIn('metal:', t(self))
 
     def test_render_sets_content_type_unless_set(self):
         from zope.publisher.browser import TestRequest
