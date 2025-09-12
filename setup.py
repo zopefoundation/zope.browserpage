@@ -15,7 +15,6 @@
 """
 import os
 
-from setuptools import find_packages
 from setuptools import setup
 
 
@@ -30,12 +29,12 @@ long_description = (read('README.rst') + '\n\n' + read('CHANGES.rst'))
 TESTS_REQUIRE = [
     'zope.browsermenu',
     'zope.testing',
-    'zope.testrunner',
+    'zope.testrunner >= 6.4',
 ]
 
 setup(
     name='zope.browserpage',
-    version='5.2.dev0',
+    version='6.0.dev0',
     url='https://github.com/zopefoundation/zope.browserpage',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.dev',
@@ -59,9 +58,6 @@ setup(
     description='ZCML directives for configuring browser views for Zope.',
     long_description=long_description,
     license='ZPL-2.1',
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
-    namespace_packages=['zope'],
     python_requires='>=3.9',
     install_requires=[
         'setuptools',
