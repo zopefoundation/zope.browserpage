@@ -7,6 +7,60 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
+
+[project]
+name = "zope.browserpage"
+version = "6.1.dev0"
+description = "ZCML directives for configuring browser views for Zope."
+license = "ZPL-2.1"
+classifiers = [
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Operating System :: OS Independent",
+    "Topic :: Internet :: WWW/HTTP",
+    "Framework :: Zope :: 3",
+]
+dynamic = ["readme"]
+requires-python = ">=3.11"
+authors = [
+    {name = "Zope Foundation and contributors",email = "zope-dev@zope.dev"},
+]
+maintainers = [
+    {name = "Plone Foundation and contributors",email = "zope-dev@zope.dev"},
+]
+dependencies = [
+    "setuptools",
+    "zope.tal >= 4.2.0",
+    "zope.pagetemplate",
+    "zope.component >= 3.7",
+    "zope.configuration",
+    "zope.interface",
+    "zope.publisher >= 3.8",
+    "zope.schema",
+    "zope.security",
+    "zope.traversing",
+]
+
+[project.optional-dependencies]
+menu = ["zope.browsermenu"]
+test = [
+    "zope.browsermenu",
+    "zope.testing",
+    "zope.testrunner >= 6.4",
+]
+
+[project.urls]
+Source = "https://github.com/zopefoundation/zope.browserpage"
+
 [tool.coverage.run]
 branch = true
 source = ["zope.browserpage"]
@@ -29,3 +83,6 @@ exclude_lines = [
 
 [tool.coverage.html]
 directory = "parts/htmlcov"
+
+[tool.setuptools.dynamic]
+readme = {file = ["README.rst", "CHANGES.rst"]}
